@@ -21,6 +21,7 @@
   ],
   "repository": "https://github.com/MikeHopcroft/labyrinth",
   "scripts": {
+    "analyze": "node build/src/apps/analyze.js",
     "docs": "node node_modules/prepress/build/src/apps/prepress.js documentation/src documentation",
     "test": "mocha 'build/test/**/*.js'",
     "lint": "gts lint",
