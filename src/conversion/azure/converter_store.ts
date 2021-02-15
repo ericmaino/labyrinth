@@ -1,9 +1,15 @@
 import {
-  BaseAzureConverter,
   IAzureConverter,
   AnyAzureObject,
-  ItemAlias,
+  parseAliases,
+  skipProcessingNodeSpecs,
 } from '.';
+
+const DefaultConverter = {
+  supportedType: 'DefaultTypes',
+  aliases: parseAliases,
+  convert: skipProcessingNodeSpecs,
+} as IAzureConverter;
 
 export class ConverterStore {
   private readonly converters: Map<string, IAzureConverter>;
@@ -11,7 +17,7 @@ export class ConverterStore {
 
   constructor(...converters: IAzureConverter[]) {
     this.converters = new Map<string, IAzureConverter>();
-    this.defaultConverter = new DefaultConverter();
+    this.defaultConverter = DefaultConverter;
 
     for (const converter of converters) {
       this.converters.set(converter.supportedType, converter);
@@ -26,20 +32,5 @@ export class ConverterStore {
     }
 
     return converter;
-  }
-}
-
-class DefaultConverter extends BaseAzureConverter {
-  constructor() {
-    super('DefaultTypes*');
-  }
-
-  aliases(input: AnyAzureObject): ItemAlias[] {
-    const aliases: ItemAlias[] = [];
-    aliases.push({
-      item: input,
-      alias: '',
-    });
-    return aliases;
   }
 }
