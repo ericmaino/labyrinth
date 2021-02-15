@@ -27,6 +27,7 @@
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
+    "debug" : "tsc && node build/src/apps/convert.js data/azure/resource-graph-1.json data/azure/resource-graph-1.yaml",
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
