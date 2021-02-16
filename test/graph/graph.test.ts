@@ -1,6 +1,6 @@
 import {assert} from 'chai';
 import 'mocha';
-import {ActionType} from '../../src';
+import {ActionType} from '../../src/rules';
 
 import {Universe} from '../../src/dimensions';
 import {
