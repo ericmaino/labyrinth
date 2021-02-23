@@ -12,6 +12,25 @@ import {
   VirtualNetworkConverter,
 } from '..';
 
+class AzureUniverse {
+  readonly symbols: SymbolStore;
+
+  constructor() {
+    this.symbols = new SymbolStore(
+      {
+        dimension: 'ip',
+        symbol: 'AzureLoadBalancer',
+        range: '168.63.129.16',
+      },
+      {
+        dimension: 'protocol',
+        symbol: 'Tcp',
+        range: 'tcp',
+      }
+    );
+  }
+}
+
 class AzureConverterImpl {
   private readonly converters: ConverterStore<AnyAzureObject>;
 
@@ -24,20 +43,7 @@ class AzureConverterImpl {
 
   constructor() {
     this.entityStore = new EntityStore();
-
-    this.symbolStore = new SymbolStore(
-      {
-        dimension: 'ip',
-        symbol: 'AzureLoadBalancer',
-        range: '168.63.129.16',
-      },
-      {
-        dimension: 'protocol',
-        symbol: 'Tcp',
-        range: 'tcp',
-      }
-    );
-
+    this.symbolStore = new AzureUniverse().symbols;
     this.vnetConverter = new VirtualNetworkConverter(this.symbolStore);
     this.converters = ConverterStore.create<AnyAzureObject>(
       this.vnetConverter,
