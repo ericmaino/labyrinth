@@ -1,4 +1,6 @@
-import {IEntityStore, NodeSpec} from '../..';
+import {NodeSpec} from '../../graph';
+
+import {IEntityStore} from '..';
 
 import {
   AnyAzureObject,
@@ -6,11 +8,13 @@ import {
   IAzureConverter,
   IpConverters,
   ItemMoniker,
-  parseMonikers,
+  extractMonikers,
 } from '.';
 
-function parseNetworkAliases(nic: AzureNetworkInterface): ItemMoniker[] {
-  const aliases = parseMonikers(nic);
+function extractNetworkInterfaceMonikers(
+  nic: AzureNetworkInterface
+): ItemMoniker[] {
+  const aliases = extractMonikers(nic);
 
   for (const config of nic.properties.ipConfigurations) {
     const converter = IpConverters.asConverter(config);
@@ -19,7 +23,7 @@ function parseNetworkAliases(nic: AzureNetworkInterface): ItemMoniker[] {
       for (const alias of converter.monikers(config)) {
         aliases.push({
           item: alias.item,
-          alias: `${nic.name}/${alias.alias}`,
+          name: `${nic.name}/${alias.name}`,
         });
       }
     }
@@ -28,7 +32,7 @@ function parseNetworkAliases(nic: AzureNetworkInterface): ItemMoniker[] {
   return aliases;
 }
 
-function parseNetworkNodeSpecs(
+function createNetworkInterfaceNodeSpecs(
   nic: AzureNetworkInterface,
   store: IEntityStore<AnyAzureObject>
 ): NodeSpec[] {
@@ -46,8 +50,8 @@ function parseNetworkNodeSpecs(
   return nodes;
 }
 
-export const NetworkInterfaceConverter = {
+export const NetworkInterfaceConverter: IAzureConverter<AzureNetworkInterface> = {
   supportedType: 'microsoft.network/networkinterfaces',
-  monikers: parseNetworkAliases,
-  convert: parseNetworkNodeSpecs,
-} as IAzureConverter<AzureNetworkInterface>;
+  monikers: extractNetworkInterfaceMonikers,
+  convert: createNetworkInterfaceNodeSpecs,
+};

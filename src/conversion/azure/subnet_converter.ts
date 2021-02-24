@@ -1,6 +1,8 @@
 import * as path from 'path';
 
-import {ForwardRuleSpec, IEntityStore, ItemMoniker, NodeSpec} from '../..';
+import {ForwardRuleSpec, NodeSpec} from '../../graph';
+
+import {IEntityStore} from '..';
 
 import {
   AnyAzureObject,
@@ -10,6 +12,7 @@ import {
   AzureVirtualNetwork,
   IAzureConverter,
   IpConverters,
+  ItemMoniker,
   NSG,
 } from '.';
 
@@ -17,16 +20,16 @@ export function getVnetId(id: string): string {
   return path.dirname(path.dirname(id));
 }
 
-function parseSubnetMonikers(input: AnyAzureObject): ItemMoniker[] {
+function extractSubnetMonikers(input: AnyAzureObject): ItemMoniker[] {
   const monikers: ItemMoniker[] = [];
   monikers.push({
     item: input,
-    alias: `${input.name}/router`,
+    name: `${input.name}/router`,
   });
   return monikers;
 }
 
-function parseSubnetNodeSpecs(
+function createSubnetNodeSpecs(
   subnet: AzureSubnet,
   store: IEntityStore<AnyAzureObject>
 ): NodeSpec[] {
@@ -114,8 +117,8 @@ function parseSubnetNodeSpecs(
   return nodes;
 }
 
-export const SubnetConverter = {
+export const SubnetConverter: IAzureConverter<AzureSubnet> = {
   supportedType: 'Microsoft.Network/virtualNetworks/subnets',
-  monikers: parseSubnetMonikers,
-  convert: parseSubnetNodeSpecs,
-} as IAzureConverter<AzureSubnet>;
+  monikers: extractSubnetMonikers,
+  convert: createSubnetNodeSpecs,
+};

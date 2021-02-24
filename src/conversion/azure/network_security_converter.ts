@@ -1,5 +1,7 @@
-import {IRules} from '..';
 import {ActionType, RuleSpec} from '../../rules';
+
+import {IRules} from '..';
+
 import {
   AzureNetworkSecurityGroup,
   AzureSecurityRule,
@@ -60,7 +62,7 @@ function convertRule(
   return spec;
 }
 
-function parseRules(
+function createNetworkSecurityGroupRules(
   nsg: AzureNetworkSecurityGroup,
   vnet: AzureVirtualNetwork
 ): IRules {
@@ -92,5 +94,5 @@ function parseRules(
 }
 
 export const NSG = {
-  parseRules,
+  parseRules: createNetworkSecurityGroupRules,
 };

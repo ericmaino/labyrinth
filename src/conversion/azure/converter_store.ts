@@ -1,15 +1,4 @@
-import {
-  IAzureConverter,
-  AnyAzureObject,
-  parseMonikers,
-  skipProcessingNodeSpecs,
-} from '.';
-
-const DefaultConverter = {
-  supportedType: 'DefaultTypes',
-  monikers: parseMonikers,
-  convert: skipProcessingNodeSpecs,
-} as IAzureConverter<AnyAzureObject>;
+import {IAzureConverter, AnyAzureObject, DefaultConverter} from '.';
 
 export class ConverterStore<T extends AnyAzureObject> {
   private readonly converters: Map<string, IAzureConverter<T>>;
