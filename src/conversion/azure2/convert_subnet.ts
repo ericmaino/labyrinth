@@ -1,13 +1,16 @@
 import {NodeSpec, RoutingRuleSpec} from '../../graph';
 
 import {IRules} from '../types';
+import {AzureGraphNode} from './azure_graph_node';
 
 import {NodeKeyAndSourceIp} from './converters';
+import {NetworkInterfaceNode} from './convert_network_interface';
 import {GraphServices} from './graph_services';
 
 import {
   AzureIdReference,
   AzureNetworkSecurityGroup,
+  AzureObjectType,
   AzureReference,
   AzureSubnet,
 } from './types';
@@ -33,6 +36,24 @@ function convertNsgRules(
   }
 
   return undefined;
+}
+
+export class SubnetNode extends AzureGraphNode<AzureSubnet> {
+  constructor(subnet: AzureSubnet) {
+    super(AzureObjectType.SUBNET, subnet);
+  }
+
+  *edges(): IterableIterator<string> {
+    if (this.value.properties.ipConfigurations) {
+      for (const item of this.value.properties.ipConfigurations) {
+        yield item.id;
+      }
+    }
+  }
+
+  nics(): IterableIterator<NetworkInterfaceNode> {
+    return this.typedEdges<NetworkInterfaceNode>(AzureObjectType.NIC);
+  }
 }
 
 export function subnetKeys(input: AzureReference<AzureSubnet>): SubnetKeys {

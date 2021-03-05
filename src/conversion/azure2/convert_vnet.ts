@@ -3,15 +3,34 @@ import DRange from 'drange';
 import {formatIpLiteral, parseIp} from '../../dimensions';
 import {RoutingRuleSpec} from '../../graph';
 
+import {AzureGraphNode} from './azure_graph_node';
 import {NodeKeyAndSourceIp} from './converters';
+import {SubnetNode} from './convert_subnet';
 import {GraphServices} from './graph_services';
-import {AzureVirtualNetwork} from './types';
+import {AzureObjectType, AzureVirtualNetwork} from './types';
+
+export class VirtualNetworkNode extends AzureGraphNode<AzureVirtualNetwork> {
+  constructor(vnet: AzureVirtualNetwork) {
+    super(AzureObjectType.VIRTUAL_NETWORK, vnet);
+  }
+
+  *edges(): IterableIterator<string> {
+    for (const item of this.value.properties.subnets) {
+      yield item.id;
+    }
+  }
+
+  subnets(): IterableIterator<SubnetNode> {
+    return this.typedEdges<SubnetNode>(AzureObjectType.SUBNET);
+  }
+}
 
 export function convertVNet(
   services: GraphServices,
-  vNetSpec: AzureVirtualNetwork
+  node: VirtualNetworkNode
 ): NodeKeyAndSourceIp {
   // Our convention is to use the Azure id as the Labyrinth NodeSpec key.
+  const vNetSpec = node.value;
   const vNetNodeKey = vNetSpec.id;
   const vNetServiceTag = vNetSpec.id;
 
@@ -34,10 +53,10 @@ export function convertVNet(
 
   const vnetDestinations: string[] = [];
   // Materialize subnets and create routes to each.
-  for (const subnetSpec of vNetSpec.properties.subnets) {
+  for (const subnetNode of node.subnets()) {
     const {key: subnetNodeKey, destinationIp} = services.convert.subnet(
       services,
-      subnetSpec,
+      subnetNode.value,
       vNetNodeKey
     );
     routes.push({

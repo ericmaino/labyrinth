@@ -12,13 +12,12 @@ import {convertSubnet} from './convert_subnet';
 import {convertVNet} from './convert_vnet';
 import {convertNsg} from './convert_network_security_group';
 import {GraphServices} from './graph_services';
-import {NameShortener} from './name_shortener';
 import {SymbolTable} from './symbol_table';
 import {AzureResourceGraph} from './types';
 
-import {walkAzureObjectBases, walkAzureTypedObjects} from './walk';
-import {AzureObjectIndex} from './azure_object_index';
+import {walkAzureTypedObjects} from './walk';
 import {convertVmssIp} from './convert_vmss';
+import {NormalizedAzureGraph} from './azure_graph_normalized';
 
 // TODO: Move `converters` to own file.
 const converters: IConverters = {
@@ -66,8 +65,17 @@ export function convert(resourceGraphSpec: AzureResourceGraph): GraphSpec {
       range: 'tcp',
     },
   ]);
-  const index = new AzureObjectIndex(resourceGraphSpec);
-  const services = new GraphServices(converters, symbols, index);
+
+  // TODO.. Might be able to get away with the index...
+  //const index = new AzureObjectIndex(resourceGraphSpec);
+
+  const azureGraph = new NormalizedAzureGraph();
+
+  for (const spec of walkAzureTypedObjects(resourceGraphSpec)) {
+    azureGraph.addNode(spec);
+  }
+
+  const services = new GraphServices(converters, symbols, azureGraph);
 
   //
   // Convert the AzureResourceGraph

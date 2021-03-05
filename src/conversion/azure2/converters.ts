@@ -1,6 +1,7 @@
 import {RuleSpec} from '../../rules';
 
 import {convertNsg} from './convert_network_security_group';
+import {VirtualNetworkNode} from './convert_vnet';
 import {GraphServices} from './graph_services';
 
 import {
@@ -11,8 +12,6 @@ import {
   AzureNetworkSecurityGroup,
   AzureResourceGraph,
   AzureSubnet,
-  AzureVirtualMachineScaleSet,
-  AzureVirtualNetwork,
 } from './types';
 
 export interface NodeKeyAndSourceIp {
@@ -44,7 +43,7 @@ export interface IConverters {
     spec: AzureSubnet,
     parent: string
   ): NodeKeyAndSourceIp;
-  vnet(services: GraphServices, spec: AzureVirtualNetwork): NodeKeyAndSourceIp;
+  vnet(services: GraphServices, spec: VirtualNetworkNode): NodeKeyAndSourceIp;
   ip(services: GraphServices, spec: AzureIdReference): NodeKeyAndSourceIp;
   loadBalancerIp(
     services: GraphServices,
@@ -71,8 +70,8 @@ export const defaultConverterMocks: IConverters = {
     // TODO: this is confusing. Returning vNetKey in destinationIp so that
     // unit tests can verify vNetKey.
     ({key: spec.id, destinationIp: `${vNetKey}`}),
-  vnet: (services: GraphServices, spec: AzureVirtualNetwork) => ({
-    key: spec.id,
+  vnet: (services: GraphServices, spec: VirtualNetworkNode) => ({
+    key: spec.key,
     destinationIp: 'xyz',
   }),
   ip: (services: GraphServices, spec: AzureIdReference) => ({

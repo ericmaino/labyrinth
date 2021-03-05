@@ -1,8 +1,28 @@
 import {NodeSpec} from '../../graph';
+
+import {AzureGraphNode} from './azure_graph_node';
 import {NodeKeyAndSourceIp} from './converters';
 import {subnetKeys} from './convert_subnet';
 import {GraphServices} from './graph_services';
 import {AzureNetworkInterface, AzureObjectType, AzureReference} from './types';
+
+export class NetworkInterfaceNode extends AzureGraphNode<
+  AzureNetworkInterface
+> {
+  constructor(item: AzureNetworkInterface) {
+    super(AzureObjectType.NIC, item);
+  }
+
+  *edges(): IterableIterator<string> {
+    for (const ipConfig of this.value.properties.ipConfigurations) {
+      yield ipConfig.id;
+
+      if (ipConfig.properties.subnet) {
+        yield ipConfig.properties.subnet.id;
+      }
+    }
+  }
+}
 
 export function convertNetworkInterface(
   services: GraphServices,

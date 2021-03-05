@@ -1,4 +1,5 @@
-import {AzureObjectIndex} from '../../../src/conversion/azure2/azure_object_index';
+import {walkAzureTypedObjects} from '../../../src/conversion/azure2';
+import {NormalizedAzureGraph} from '../../../src/conversion/azure2/azure_graph_normalized';
 import {DefaultConverterConfig} from '../../../src/conversion/azure2/convert';
 import {GraphServices} from '../../../src/conversion/azure2/graph_services';
 import {SymbolTable} from '../../../src/conversion/azure2/symbol_table';
@@ -10,7 +11,11 @@ export class ServiceOracle {
   ): GraphServices {
     const converters = DefaultConverterConfig;
     const symbolTable = new SymbolTable([]);
-    const index = new AzureObjectIndex(spec);
-    return new GraphServices(converters, symbolTable, index);
+    const graph = new NormalizedAzureGraph();
+
+    for (const item of walkAzureTypedObjects(spec)) {
+      graph.addNode(item);
+    }
+    return new GraphServices(converters, symbolTable, graph);
   }
 }

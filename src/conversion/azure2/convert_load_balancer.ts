@@ -6,9 +6,11 @@ import {
   AzureLoadBalancerBackendPool,
   AzureLoadBalancerInboundNatRule,
   AzureLoadBalancerFrontEndIp,
+  AzureObjectType,
 } from './types';
 import {GraphServices} from './graph_services';
 import {NodeKeyAndSourceIp} from './converters';
+import {AzureGraphNode} from './azure_graph_node';
 
 // TODO: Move into constants
 const AzureLoadBalancerSymbol = 'AzureLoadBalancer';
@@ -95,6 +97,18 @@ function createNATRoute(
   }
 
   return ruleSpec;
+}
+
+export class LoadBalancerNode extends AzureGraphNode<AzureLoadBalancer> {
+  constructor(input: AzureLoadBalancer) {
+    super(input.type as AzureObjectType, input);
+  }
+
+  *edges(): IterableIterator<string> {
+    for (const ip of this.value.properties.frontendIPConfigurations) {
+      yield ip.properties.publicIPAddress.id;
+    }
+  }
 }
 
 export function convertLoadBalancer(

@@ -26,7 +26,7 @@ export function convertIp(
   services: GraphServices,
   ipRefSpec: AzureIdReference
 ): NodeKeyAndSourceIp {
-  if (!services.index.has(ipRefSpec)) {
+  if (!services.index.hasNode(ipRefSpec.id)) {
     return services.convert.vmssIp(services, ipRefSpec);
   }
 

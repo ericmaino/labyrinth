@@ -76,7 +76,7 @@ describe('Azure', () => {
       const graph = ResourceGraphOracle.ValidVnetGraph();
       const services = ServiceOracle.InitializedGraphServices(graph);
 
-      services.convert.vnet(services, vnetSpec);
+      services.convert.vnet(services, services.index.getNode(vnetSpec.id));
       const nodeGraph = services.getLabyrinthGraphSpec();
       assert.deepEqual(nodeGraph, expected);
     });
