@@ -1,46 +1,25 @@
-import {AzureId} from './azure_id';
 import {NodeKeyAndSourceIp} from './converters';
 import {GraphServices} from './graph_services';
-import {
-  AzureIdReference,
-  AzureIPConfiguration,
-  AzureObjectType,
-  AzureVirtualMachineScaleSet,
-} from './types';
+import {AzureIdReference, AzureIPConfiguration, AzureObjectType} from './types';
 
-function convertToIpAddress(ipItem: AzureIPConfiguration): string {
-  let ip: string;
-  if (ipItem.type === AzureObjectType.LOCAL_IP) {
-    ip = ipItem.properties.privateIPAddress;
-  } else {
-    ip = ipItem.properties.ipAddress;
-  }
-  return ip;
-}
+const KEY_INTERNET = 'Internet';
 
 export function convertKnownIp(
+  services: GraphServices,
   ipConfig: AzureIPConfiguration
 ): NodeKeyAndSourceIp {
-  const ip = convertToIpAddress(ipConfig);
-  const ipKey = ipConfig.id;
-
-  return {key: ipKey, destinationIp: ip};
-}
-export function convertAsVMSSIp(
-  services: GraphServices,
-  ipRefSpec: AzureIdReference
-): NodeKeyAndSourceIp {
-  const vmssIds = AzureId.parseAsVMSSIpConfiguration(ipRefSpec);
-  const vmss: AzureVirtualMachineScaleSet = services.index.dereference(
-    vmssIds.vmssId
-  );
-
-  return services.convert.vmssIp(
-    services,
-    vmss,
-    vmssIds.interfaceConfig,
-    vmssIds.ipConfig
-  );
+  if (ipConfig.type === AzureObjectType.LOCAL_IP) {
+    if (!ipConfig.properties.subnet) {
+      throw new TypeError(`Local IP '${ipConfig.id}' is not bound to a subnet`);
+    }
+    const subnet = services.index.dereference(ipConfig.properties.subnet);
+    return {
+      key: `${subnet.id}/inbound`,
+      destinationIp: ipConfig.properties.privateIPAddress,
+    };
+  } else {
+    return {key: KEY_INTERNET, destinationIp: ipConfig.properties.ipAddress};
+  }
 }
 
 export function convertIp(
@@ -48,9 +27,9 @@ export function convertIp(
   ipRefSpec: AzureIdReference
 ): NodeKeyAndSourceIp {
   if (!services.index.has(ipRefSpec)) {
-    return convertAsVMSSIp(services, ipRefSpec);
+    return services.convert.vmssIp(services, ipRefSpec);
   }
 
   const ipConfig = services.index.dereference<AzureIPConfiguration>(ipRefSpec);
-  return convertKnownIp(ipConfig);
+  return convertKnownIp(services, ipConfig);
 }

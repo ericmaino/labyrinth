@@ -1,44 +1,43 @@
 import {NodeSpec} from '../../graph';
+import {AzureId} from './azure_id';
 import {NodeKeyAndSourceIp} from './converters';
+import {subnetKeys} from './convert_subnet';
 import {GraphServices} from './graph_services';
-import {AzureVirtualMachineScaleSet} from './types';
+import {AzureIdReference, AzureVirtualMachineScaleSet} from './types';
 
 export function convertVmssIp(
   services: GraphServices,
-  vmssSpec: AzureVirtualMachineScaleSet,
-  networkInterface: string,
-  ipConfig: string
+  ipRefSpec: AzureIdReference
 ): NodeKeyAndSourceIp {
+  const vmssIds = AzureId.parseAsVMSSIpConfiguration(ipRefSpec);
+  const vmssSpec: AzureVirtualMachineScaleSet = services.index.dereference(
+    vmssIds.vmssId
+  );
+
   const networkConfig = vmssSpec.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations.find(
-    input => input.name === networkInterface
+    input => input.name === vmssIds.interfaceConfig
   );
 
   if (!networkConfig) {
     throw new TypeError(
-      `Incomplete graph. Unable to locate VMSS '${vmssSpec.id}' with interface config '${networkInterface}'`
+      `Incomplete graph. Unable to locate VMSS '${vmssSpec.id}' with interface config '${vmssIds.interfaceConfig}'`
     );
   }
 
   const ipconfigSpec = networkConfig.properties.ipConfigurations.find(
-    input => input.name === ipConfig
+    input => input.name === vmssIds.ipConfig
   );
 
   if (!ipconfigSpec) {
     throw new TypeError(
-      `Incomplete graph. Unable to locate VMSS '${vmssSpec.id}' with ip config '${ipConfig}'`
+      `Incomplete graph. Unable to locate VMSS '${vmssSpec.id}' with ip config '${vmssIds.ipConfig}'`
     );
   }
 
-  // TODO: Process NSG rules
-  const vmssIpNode: NodeSpec = {
-    key: `${vmssSpec.id}/${networkInterface}/${ipConfig}`,
-    filters: [],
-    routes: [
-      {
-        destination: 'Internet',
-      },
-    ],
+  const subnet = subnetKeys(ipconfigSpec.properties.subnet);
+
+  return {
+    key: subnet.inbound,
+    destinationIp: `${vmssSpec.name}/${vmssIds.logicalId}`,
   };
-  services.addNode(vmssIpNode);
-  return {key: vmssIpNode.key, destinationIp: 'INVALID'};
 }

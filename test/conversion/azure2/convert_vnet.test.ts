@@ -13,17 +13,6 @@ describe('Azure', () => {
         nodes: [
           {
             key:
-              '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testing-network-testing/providers/Microsoft.Network/virtualNetworks/VNET-B/subnets/A/router',
-            routes: [
-              {
-                constraints: {destinationIp: 'except 172.18.0.0/28'},
-                destination:
-                  '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testing-network-testing/providers/Microsoft.Network/virtualNetworks/VNET-B/subnets/A/outbound',
-              },
-            ],
-          },
-          {
-            key:
               '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testing-network-testing/providers/Microsoft.Network/virtualNetworks/VNET-B/subnets/A/inbound',
             filters: [
               {
@@ -44,8 +33,9 @@ describe('Azure', () => {
             ],
             routes: [
               {
+                constraints: {destinationIp: 'except 172.18.0.0/28'},
                 destination:
-                  '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testing-network-testing/providers/Microsoft.Network/virtualNetworks/VNET-B/subnets/A/router',
+                  '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testing-network-testing/providers/Microsoft.Network/virtualNetworks/VNET-B/subnets/A/outbound',
               },
             ],
           },
@@ -53,12 +43,7 @@ describe('Azure', () => {
             key:
               '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testing-network-testing/providers/Microsoft.Network/virtualNetworks/VNET-B/subnets/A/outbound',
             filters: [],
-            routes: [
-              {
-                destination:
-                  '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testing-network-testing/providers/Microsoft.Network/virtualNetworks/VNET-B',
-              },
-            ],
+            routes: [{destination: 'Internet'}],
           },
           {
             key:

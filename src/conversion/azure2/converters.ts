@@ -61,9 +61,7 @@ export interface IConverters {
   ): NSGRuleSpecs;
   vmssIp(
     services: GraphServices,
-    vmssSpec: AzureVirtualMachineScaleSet,
-    networkIterface: string,
-    ipConfig: string
+    ipConfigRef: AzureIdReference
   ): NodeKeyAndSourceIp;
 }
 
@@ -103,11 +101,9 @@ export const defaultConverterMocks: IConverters = {
   nsg: convertNsg,
   vmssIp: (
     services: GraphServices,
-    vmssSpec: AzureVirtualMachineScaleSet,
-    networkIterface: string,
-    ipConfig: string
+    ipConfigRef: AzureIdReference
   ): NodeKeyAndSourceIp => ({
-    key: vmssSpec.id,
+    key: ipConfigRef.id,
     destinationIp: 'xyz',
   }),
 };

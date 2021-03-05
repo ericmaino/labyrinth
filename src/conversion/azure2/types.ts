@@ -55,7 +55,7 @@ export interface AzureLocalIP extends AzureObjectBase {
   type: AzureObjectType.LOCAL_IP;
   properties: {
     privateIPAddress: string;
-    subnet: AzureIdReference | undefined;
+    subnet: AzureReference<AzureSubnet> | undefined;
   };
 }
 
