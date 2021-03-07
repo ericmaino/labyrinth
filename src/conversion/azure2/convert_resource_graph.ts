@@ -31,6 +31,11 @@ export function convertResourceGraph(services: GraphServices) {
       destination: key,
       constraints: {destinationIp},
     });
+
+    // TODO: Fix the conversion story.
+    for (const lb of graph.loadBalancers()) {
+      lb.convert(services);
+    }
   }
 
   // const lb = asLoadBalancer(item);

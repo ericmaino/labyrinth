@@ -43,12 +43,17 @@ export enum AzureObjectType {
   SUBNET = 'Microsoft.Network/virtualNetworks/subnets',
   VIRTUAL_NETWORK = 'microsoft.network/virtualnetworks',
   VIRTUAL_MACHINE_SCALE_SET = 'microsoft.compute/virtualmachinescalesets',
+  VMSS_VIRTUAL_IP = 'microsoft.compute/virtualmachinescalesets/virtual.ip',
   LOAD_BALANCER_BACKEND_POOL = 'Microsoft.Network/loadBalancers/backendAddressPools',
   LOAD_BALANCER_FRONT_END_IP = 'Microsoft.Network/loadBalancers/frontendIPConfigurations',
   LOAD_BALANCER_NAT_POOL_INBOUND = 'Microsoft.Network/loadBalancers/inboundNatPools',
   LOAD_BALANCER_NAT_RULE_INBOUND = 'Microsoft.Network/loadBalancers/inboundNatRules',
   LOAD_BALANCER_RULE = 'Microsoft.Network/loadBalancers/loadBalancingRules',
   LOAD_BALANCER = 'microsoft.network/loadbalancers',
+}
+
+export interface AzureVMSSVirtualIp extends AzureObjectBase {
+  type: AzureObjectType.VMSS_VIRTUAL_IP;
 }
 
 export interface AzureLocalIP extends AzureObjectBase {
@@ -241,6 +246,7 @@ export type AnyAzureObject =
   | AzureSecurityRule
   | AzureSubnet
   | AzureVirtualMachineScaleSet
+  | AzureVMSSVirtualIp
   | AzureVirtualNetwork;
 
 export type AzureResourceGraph = AnyAzureObject[];

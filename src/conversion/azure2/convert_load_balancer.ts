@@ -7,20 +7,18 @@ import {
   AzureLoadBalancerInboundNatRule,
   AzureLoadBalancerFrontEndIp,
   AzureObjectType,
+  AzureIdReference,
 } from './types';
 import {GraphServices} from './graph_services';
 import {NodeKeyAndSourceIp} from './converters';
 import {AzureGraphNode} from './azure_graph_node';
-import {AzureTypedObject} from '../azure';
 import {IpNode} from './convert_ip';
+import {SubnetNode} from './convert_subnet';
+import {AzureId} from './azure_id';
+import {VMSSVirtualIpNode} from './convert_vmss';
 
 // TODO: Move into constants
 const AzureLoadBalancerSymbol = 'AzureLoadBalancer';
-
-interface PoolRoute {
-  frontEndIp: string;
-  pool: RoutingRuleSpec[];
-}
 
 export class LoadBalancerFrontEndIpNode extends AzureGraphNode<
   AzureLoadBalancerFrontEndIp
@@ -55,8 +53,23 @@ export class LoadBalancerBackEndPoolNode extends AzureGraphNode<
     }
   }
 
+  subnet(): SubnetNode {
+    let subnet = this.firstOrDefault<IpNode>(
+      AzureObjectType.LOCAL_IP
+    )?.subnet();
+
+    if (!subnet) {
+      const vmssIp = this.first<VMSSVirtualIpNode>(
+        AzureObjectType.VMSS_VIRTUAL_IP
+      );
+      subnet = vmssIp.subnet();
+    }
+
+    return subnet;
+  }
+
   protected convertNode(services: GraphServices): NodeKeyAndSourceIp {
-    throw new Error('Method not implemented.');
+    return {key: this.value.id, destinationIp: this.value.id};
   }
 }
 
@@ -92,18 +105,18 @@ export class LoadBalancerRuleNode extends AzureGraphNode<
     const rule = this.value.properties;
 
     const frontEndIp = this.frontEndIp().ip().ipAddress();
-    const backEndPool = this.backendPool().convert(services);
+    const backEndPool = this.backendPool();
 
     // TODO: Handle pool. . .
     const ruleSpec: RoutingRuleSpec = {
-      destination: backEndPool.key,
+      destination: backEndPool.subnet().convert(services).key,
       constraints: {
         destinationPort: `${rule.frontendPort}`,
         protocol: rule.protocol,
         destinationIp: frontEndIp,
       },
       override: {
-        destinationIp: backEndPool.destinationIp,
+        destinationIp: backEndPool.convert(services).destinationIp,
         sourceIp: AzureLoadBalancerSymbol,
       },
     };

@@ -1,4 +1,7 @@
+import {isAbsolute} from 'path';
+import {AzureTypedObject} from '../azure/types';
 import {AzureGraphNode} from './azure_graph_node';
+import {AzureId} from './azure_id';
 import {NodeKeyAndSourceIp} from './converters';
 import {SubnetNode} from './convert_subnet';
 import {GraphServices} from './graph_services';
@@ -37,6 +40,10 @@ export class IpNode extends AzureGraphNode<AzureIPConfiguration> {
     }
   }
 
+  subnet(): SubnetNode {
+    return this.first<SubnetNode>(AzureObjectType.SUBNET);
+  }
+
   private nodeKey(): string {
     let key = KEY_INTERNET;
 
@@ -45,9 +52,5 @@ export class IpNode extends AzureGraphNode<AzureIPConfiguration> {
     }
 
     return key;
-  }
-
-  private subnet(): SubnetNode {
-    return this.first<SubnetNode>(AzureObjectType.SUBNET);
   }
 }

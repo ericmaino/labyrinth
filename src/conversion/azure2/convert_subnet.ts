@@ -91,7 +91,7 @@ export class SubnetNode extends AzureGraphNode<AzureSubnet> {
     for (const ip of this.ipAddreses()) {
       const {key, destinationIp} = ip.convert(services);
       routes.push({
-        destination: key,
+        destination: `FIX - NIC : ${key}`,
         constraints: {destinationIp},
       });
     }
@@ -113,7 +113,7 @@ export class SubnetNode extends AzureGraphNode<AzureSubnet> {
       filters: nsgRules?.outboundRules,
       routes: [
         {
-          destination: 'Internet',
+          destination: this.vnet().nodeKey,
         },
       ],
     };

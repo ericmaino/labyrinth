@@ -46,6 +46,17 @@ export class GraphE<TInput, TStorageNode extends IGraphENode> {
     return this.nodes.has(this.asKey(id));
   }
 
+  unresolvedEdges(): IterableIterator<string> {
+    return this.edges.keys();
+  }
+
+  validate() {
+    if (this.edges.size > 0) {
+      console.log(JSON.stringify([...this.edges.keys()]));
+      throw new Error('Spec is invalid and currently has unresolved edges');
+    }
+  }
+
   protected asKey(input: string) {
     return input.toLowerCase();
   }

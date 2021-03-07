@@ -1,7 +1,7 @@
 import {GraphSpec} from '../../graph';
 import {GraphServices} from './graph_services';
 import {SymbolTable} from './symbol_table';
-import {AzureResourceGraph} from './types';
+import {AzureObjectType, AzureResourceGraph} from './types';
 
 import {walkAzureTypedObjects} from './walk';
 import {NormalizedAzureGraph} from './azure_graph_normalized';
@@ -49,6 +49,19 @@ export function convert(resourceGraphSpec: AzureResourceGraph): GraphSpec {
   for (const spec of walkAzureTypedObjects(resourceGraphSpec)) {
     azureGraph.addNode(spec);
   }
+
+  // It's possible that the Azure Resource Graph spec may contains edges
+  // which are virtual and do not exist in the graph. Attempt resolve
+  // edges
+  for (const unresolvedEdge of azureGraph.unresolvedEdges()) {
+    azureGraph.addNode({
+      name: unresolvedEdge,
+      id: unresolvedEdge,
+      type: AzureObjectType.VMSS_VIRTUAL_IP,
+      resourceGroup: 'virtual',
+    });
+  }
+  azureGraph.validate();
 
   const services = new GraphServices(symbols, azureGraph);
 

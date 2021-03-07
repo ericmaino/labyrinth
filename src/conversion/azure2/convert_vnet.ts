@@ -11,10 +11,12 @@ import {AzureObjectType, AzureVirtualNetwork} from './types';
 
 export class VirtualNetworkNode extends AzureGraphNode<AzureVirtualNetwork> {
   readonly serviceTag: string;
+  readonly nodeKey: string;
 
   constructor(vnet: AzureVirtualNetwork) {
     super(AzureObjectType.VIRTUAL_NETWORK, vnet);
     this.serviceTag = vnet.id;
+    this.nodeKey = vnet.id;
   }
 
   *edges(): IterableIterator<string> {
@@ -30,7 +32,6 @@ export class VirtualNetworkNode extends AzureGraphNode<AzureVirtualNetwork> {
   convertNode(services: GraphServices): NodeKeyAndSourceIp {
     // Our convention is to use the Azure id as the Labyrinth NodeSpec key.
     const vNetSpec = this.value;
-    const vNetNodeKey = vNetSpec.id;
 
     // Compute this VNet's address range by unioning up all of its address prefixes.
     const addressRange = new DRange();
@@ -62,11 +63,11 @@ export class VirtualNetworkNode extends AzureGraphNode<AzureVirtualNetwork> {
     }
 
     services.addNode({
-      key: vNetNodeKey,
+      key: this.nodeKey,
       range: {sourceIp},
       routes,
     });
 
-    return {key: vNetNodeKey, destinationIp: vnetDestinations.join(',')};
+    return {key: this.nodeKey, destinationIp: vnetDestinations.join(',')};
   }
 }
