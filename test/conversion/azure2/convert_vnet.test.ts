@@ -1,4 +1,5 @@
 import {assert} from 'chai';
+import {setServers} from 'dns';
 import 'mocha';
 import {ActionType} from '../../../src';
 import {convert} from '../../../src/conversion/azure2/convert';
@@ -72,14 +73,15 @@ describe('Azure', () => {
         ],
       };
 
-      const vnetSpec = ResourceGraphOracle.ValidVnet();
       const graph = ResourceGraphOracle.ValidVnetGraph();
       const services = ServiceOracle.InitializedGraphServices(graph);
 
-      assert.fail('fixme');
-      // services.convert.vnet(services, services.index.getNode(vnetSpec.id));
-      // const nodeGraph = services.getLabyrinthGraphSpec();
-      // assert.deepEqual(nodeGraph, expected);
+      for (const vnet of services.index.virtualNetworks()) {
+        vnet.convert(services);
+      }
+
+      const nodeGraph = services.getLabyrinthGraphSpec();
+      assert.deepEqual(nodeGraph, expected);
     });
   });
 

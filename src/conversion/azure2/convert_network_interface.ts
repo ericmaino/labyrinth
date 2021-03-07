@@ -23,7 +23,7 @@ export class NetworkInterfaceNode extends AzureGraphNode<
     }
   }
 
-  convert(services: GraphServices): NodeKeyAndSourceIp {
+  protected convertNode(services: GraphServices): NodeKeyAndSourceIp {
     throw new Error('Method not implemented.');
   }
 }

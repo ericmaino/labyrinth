@@ -27,7 +27,7 @@ export class VirtualNetworkNode extends AzureGraphNode<AzureVirtualNetwork> {
     return this.typedEdges<SubnetNode>(AzureObjectType.SUBNET);
   }
 
-  convert(services: GraphServices): NodeKeyAndSourceIp {
+  convertNode(services: GraphServices): NodeKeyAndSourceIp {
     // Our convention is to use the Azure id as the Labyrinth NodeSpec key.
     const vNetSpec = this.value;
     const vNetNodeKey = vNetSpec.id;

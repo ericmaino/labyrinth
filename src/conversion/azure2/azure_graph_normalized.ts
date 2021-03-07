@@ -4,6 +4,7 @@ import {AzureGraphNode, DefaultNode, IAzureGraphNode} from './azure_graph_node';
 import {IpNode} from './convert_ip';
 import {LoadBalancerNode} from './convert_load_balancer';
 import {NetworkInterfaceNode} from './convert_network_interface';
+import {NetworkSecurityGroupNode} from './convert_network_security_group';
 import {SubnetNode} from './convert_subnet';
 import {VirtualNetworkNode} from './convert_vnet';
 import {GraphE} from './graph_e';
@@ -68,6 +69,8 @@ export class NormalizedAzureGraph extends GraphE<
         return new VirtualNetworkNode(input);
       case AzureObjectType.SUBNET:
         return new SubnetNode(input);
+      case AzureObjectType.NSG:
+        return new NetworkSecurityGroupNode(input);
       case AzureObjectType.NIC:
         return new NetworkInterfaceNode(input);
       case AzureObjectType.LOAD_BALANCER:

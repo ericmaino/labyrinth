@@ -89,7 +89,7 @@ export class NetworkSecurityGroupNode extends AzureGraphNode<
     super(AzureObjectType.NSG, input);
   }
 
-  convert(services: GraphServices): NodeKeyAndSourceIp {
+  protected convertNode(services: GraphServices): NodeKeyAndSourceIp {
     throw new Error('Method not implemented.');
   }
 

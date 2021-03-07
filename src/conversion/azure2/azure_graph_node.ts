@@ -24,6 +24,8 @@ export abstract class AzureGraphNode<T extends AzureTypedObject>
   private readonly typeToEdge: Map<AzureObjectType, Set<IAzureGraphNode>>;
   protected readonly nodes: IAzureGraphNode[];
 
+  private conversionResult: NodeKeyAndSourceIp | undefined;
+
   protected constructor(type: AzureObjectType, item: T) {
     this.key = asKey(item.id);
     this.type = type;
@@ -84,7 +86,15 @@ export abstract class AzureGraphNode<T extends AzureTypedObject>
     return result?.value;
   }
 
-  abstract convert(services: GraphServices): NodeKeyAndSourceIp;
+  convert(services: GraphServices): NodeKeyAndSourceIp {
+    if (!this.conversionResult) {
+      this.conversionResult = this.convertNode(services);
+    }
+
+    return this.conversionResult;
+  }
+
+  protected abstract convertNode(services: GraphServices): NodeKeyAndSourceIp;
 }
 
 export class DefaultNode extends AzureGraphNode<AzureTypedObject> {
@@ -96,7 +106,7 @@ export class DefaultNode extends AzureGraphNode<AzureTypedObject> {
     return [].values();
   }
 
-  convert(services: GraphServices): NodeKeyAndSourceIp {
+  convertNode(services: GraphServices): NodeKeyAndSourceIp {
     throw new Error('Method not implemented.');
   }
 }

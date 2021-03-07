@@ -30,8 +30,11 @@ export function subnetKeys(input: AzureReference<AzureSubnet>): SubnetKeys {
 }
 
 export class SubnetNode extends AzureGraphNode<AzureSubnet> {
+  readonly keys: SubnetKeys;
+
   constructor(subnet: AzureSubnet) {
     super(AzureObjectType.SUBNET, subnet);
+    this.keys = subnetKeys(subnet);
   }
 
   *edges(): IterableIterator<string> {
@@ -68,7 +71,7 @@ export class SubnetNode extends AzureGraphNode<AzureSubnet> {
     }
   }
 
-  convert(services: GraphServices): NodeKeyAndSourceIp {
+  protected convertNode(services: GraphServices): NodeKeyAndSourceIp {
     const subnetSpec = this.value;
     const keys = subnetKeys(subnetSpec);
 

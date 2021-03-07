@@ -19,11 +19,11 @@ export class IpNode extends AzureGraphNode<AzureIPConfiguration> {
     }
   }
 
-  convert(services: GraphServices): NodeKeyAndSourceIp {
+  protected convertNode(services: GraphServices): NodeKeyAndSourceIp {
     return {key: this.nodeKey(), destinationIp: this.ipAddress()};
   }
 
-  private ipAddress(): string {
+  public ipAddress(): string {
     if (this.value.type === AzureObjectType.LOCAL_IP) {
       if (!this.value.properties.subnet) {
         throw new TypeError(
@@ -41,7 +41,7 @@ export class IpNode extends AzureGraphNode<AzureIPConfiguration> {
     let key = KEY_INTERNET;
 
     if (this.value.type === AzureObjectType.LOCAL_IP) {
-      key = `${this.subnet().value.id}/inbound`;
+      key = this.subnet().keys.inbound;
     }
 
     return key;
