@@ -11,6 +11,7 @@ import {
 import {GraphServices} from './graph_services';
 import {NodeKeyAndSourceIp} from './converters';
 import {AzureGraphNode} from './azure_graph_node';
+import {AzureTypedObject} from '../azure';
 
 // TODO: Move into constants
 const AzureLoadBalancerSymbol = 'AzureLoadBalancer';
@@ -24,79 +25,81 @@ function creatLoadBalancerRulePool(
   lbRuleSpec: AzureLoadBalancerRule,
   services: GraphServices
 ): PoolRoute {
-  const convert = services.convert;
   const store = services.index;
   const rule = lbRuleSpec.properties;
   const pool: RoutingRuleSpec[] = [];
 
-  const {destinationIp: frontEndIp} = convert.loadBalancerIp(
-    services,
-    store.dereference(rule.frontendIPConfiguration)
-  );
+  throw new TypeError('fix me');
 
-  const backEndPool: AzureLoadBalancerBackendPool = store.dereference(
-    rule.backendAddressPool
-  );
+  // const {destinationIp: frontEndIp} = convert.loadBalancerIp(
+  //   services,
+  //   store.dereference(rule.frontendIPConfiguration)
+  // );
 
-  for (const backendIpRef of backEndPool.properties.backendIPConfigurations) {
-    const backendIp = services.convert.ip(services, backendIpRef);
-    const ruleSpec: RoutingRuleSpec = {
-      destination: backendIp.key,
-      constraints: {
-        destinationPort: `${rule.frontendPort}`,
-        protocol: rule.protocol,
-        destinationIp: frontEndIp,
-      },
-      override: {
-        destinationIp: backendIp.destinationIp,
-        sourceIp: AzureLoadBalancerSymbol,
-      },
-    };
+  // const backEndPool: AzureLoadBalancerBackendPool = store.dereference(
+  //   rule.backendAddressPool
+  // );
 
-    if (rule.backendPort !== rule.frontendPort) {
-      ruleSpec.override!.destinationPort = `${rule.backendPort}`;
-    }
+  // for (const backendIpRef of backEndPool.properties.backendIPConfigurations) {
+  //   const backendIp = services.convert.ip(services, backendIpRef);
+  //   const ruleSpec: RoutingRuleSpec = {
+  //     destination: backendIp.key,
+  //     constraints: {
+  //       destinationPort: `${rule.frontendPort}`,
+  //       protocol: rule.protocol,
+  //       destinationIp: frontEndIp,
+  //     },
+  //     override: {
+  //       destinationIp: backendIp.destinationIp,
+  //       sourceIp: AzureLoadBalancerSymbol,
+  //     },
+  //   };
 
-    pool.push(ruleSpec);
-  }
+  //   if (rule.backendPort !== rule.frontendPort) {
+  //     ruleSpec.override!.destinationPort = `${rule.backendPort}`;
+  //   }
 
-  return {frontEndIp, pool};
+  //   pool.push(ruleSpec);
+  // }
+
+  // return {frontEndIp, pool};
 }
 
 function createNATRoute(
   natRuleSpec: AzureLoadBalancerInboundNatRule,
   services: GraphServices
 ): RoutingRuleSpec | null {
-  const convert = services.convert;
-  const store = services.index;
+  throw new TypeError('fix me');
+  // const convert = services.convert;
+  // const store = services.index;
 
-  const rule = natRuleSpec.properties;
+  // const rule = natRuleSpec.properties;
 
-  const backEnd = convert.ip(services, rule.backendIPConfiguration);
+  // const backEnd = convert.ip(services, rule.backendIPConfiguration);
 
-  const {destinationIp: frontEndIp} = convert.loadBalancerIp(
-    services,
-    store.dereference(rule.frontendIPConfiguration)
-  );
+  // const {destinationIp: frontEndIp} = convert.loadBalancerIp(
+  //   services,
+  //   store.dereference(rule.frontendIPConfiguration)
+  // );
 
-  const ruleSpec: RoutingRuleSpec = {
-    destination: backEnd.key,
-    constraints: {
-      destinationPort: `${rule.frontendPort}`,
-      protocol: rule.protocol,
-      destinationIp: frontEndIp,
-    },
-    override: {
-      destinationIp: backEnd.destinationIp,
-      sourceIp: AzureLoadBalancerSymbol,
-    },
-  };
+  // const ruleSpec: RoutingRuleSpec = {
+  //   destination: backEnd.key,
+  //   constraints: {
+  //     destinationPort: `${rule.frontendPort}`,
+  //     protocol: rule.protocol,
+  //     destinationIp: frontEndIp,
+  //   },
+  //   override: {
+  //     destinationIp: backEnd.destinationIp,
+  //     sourceIp: AzureLoadBalancerSymbol,
+  //   },
+  // };
 
-  if (rule.backendPort !== rule.frontendPort) {
-    ruleSpec.override!.destinationPort = `${rule.backendPort}`;
-  }
+  // if (rule.backendPort !== rule.frontendPort) {
+  //   ruleSpec.override!.destinationPort = `${rule.backendPort}`;
+  // }
 
-  return ruleSpec;
+  // return ruleSpec;
 }
 
 export class LoadBalancerNode extends AzureGraphNode<AzureLoadBalancer> {
@@ -108,6 +111,10 @@ export class LoadBalancerNode extends AzureGraphNode<AzureLoadBalancer> {
     for (const ip of this.value.properties.frontendIPConfigurations) {
       yield ip.properties.publicIPAddress.id;
     }
+  }
+
+  convert(services: GraphServices): NodeKeyAndSourceIp {
+    throw new Error('Method not implemented.');
   }
 }
 
@@ -157,7 +164,8 @@ export function convertLoadBalancerIp(
   const ipConfigSpec = services.index.dereference(
     loadBalancerIpSpec.properties.publicIPAddress
   );
-  return services.convert.ip(services, ipConfigSpec);
+    throw new Error('Method not implemented.');
+//  return services.convert.ip(services, ipConfigSpec);
 }
 
 export function convertBackendPool(
@@ -167,24 +175,25 @@ export function convertBackendPool(
   const poolServiceTag = backendPoolSpec.id;
   const poolIpRange = new Set<string>();
   let poolSubnetKey = '';
+  throw new Error('Method not implemented.');
 
-  for (const backendIp of backendPoolSpec.properties.backendIPConfigurations) {
-    const ip = services.convert.ip(services, backendIp);
-    poolIpRange.add(ip.destinationIp);
+  //   for (const backendIp of backendPoolSpec.properties.backendIPConfigurations) {
+  //   const ip = services.convert.ip(services, backendIp);
+  //   poolIpRange.add(ip.destinationIp);
 
-    if (poolSubnetKey !== '' && poolSubnetKey !== ip.key) {
-      throw new TypeError(
-        'Invalid assumption. Pools should not be allowed to cross subnets'
-      );
-    }
+  //   if (poolSubnetKey !== '' && poolSubnetKey !== ip.key) {
+  //     throw new TypeError(
+  //       'Invalid assumption. Pools should not be allowed to cross subnets'
+  //     );
+  //   }
 
-    poolSubnetKey = ip.key;
-  }
+  //   poolSubnetKey = ip.key;
+  // }
 
-  services.symbols.defineServiceTag(
-    poolServiceTag,
-    [...poolIpRange.values()].join(',')
-  );
+  // services.symbols.defineServiceTag(
+  //   poolServiceTag,
+  //   [...poolIpRange.values()].join(',')
+  // );
 
-  return {key: poolSubnetKey, destinationIp: poolServiceTag};
+  // return {key: poolSubnetKey, destinationIp: poolServiceTag};
 }

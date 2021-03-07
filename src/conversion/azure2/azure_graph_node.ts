@@ -1,4 +1,6 @@
 import {AzureTypedObject} from '../azure/types';
+import {NodeKeyAndSourceIp} from './converters';
+import {GraphServices} from './graph_services';
 import {AzureObjectType} from './types';
 
 export interface IAzureGraphNode {
@@ -63,6 +65,26 @@ export abstract class AzureGraphNode<T extends AzureTypedObject>
       }
     }
   }
+
+  first<T extends IAzureGraphNode>(type: AzureObjectType): T {
+    const result = this.firstOrDefault<T>(type);
+
+    if (!result) {
+      throw new TypeError(`Failed to find edge of type ${type}`);
+    }
+
+    return result;
+  }
+
+  firstOrDefault<T extends IAzureGraphNode>(
+    type: AzureObjectType
+  ): T | undefined {
+    const items = this.typedEdges<T>(type);
+    const result = items.next();
+    return result?.value;
+  }
+
+  abstract convert(services: GraphServices): NodeKeyAndSourceIp;
 }
 
 export class DefaultNode extends AzureGraphNode<AzureTypedObject> {
@@ -72,5 +94,9 @@ export class DefaultNode extends AzureGraphNode<AzureTypedObject> {
 
   edges(): IterableIterator<string> {
     return [].values();
+  }
+
+  convert(services: GraphServices): NodeKeyAndSourceIp {
+    throw new Error('Method not implemented.');
   }
 }

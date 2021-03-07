@@ -24,7 +24,7 @@ export function convertResourceGraph(services: GraphServices) {
 
   for (const vnet of graph.virtualNetworks()) {
     // If the top-level item happens to be a VNet then materialize it.
-    const {key, destinationIp} = services.convert.vnet(services, vnet);
+    const {key, destinationIp} = vnet.convert(services);
     vNetNodeKeys.push(key);
 
     routes.push({

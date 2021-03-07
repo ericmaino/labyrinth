@@ -1,36 +1,11 @@
 import {GraphSpec} from '../../graph';
-
-import {convertIp} from './convert_ip';
-import {IConverters} from './converters';
-import {
-  convertBackendPool,
-  convertLoadBalancer,
-  convertLoadBalancerIp,
-} from './convert_load_balancer';
-import {convertResourceGraph} from './convert_resource_graph';
-import {convertSubnet} from './convert_subnet';
-import {convertVNet} from './convert_vnet';
-import {convertNsg} from './convert_network_security_group';
 import {GraphServices} from './graph_services';
 import {SymbolTable} from './symbol_table';
 import {AzureResourceGraph} from './types';
 
 import {walkAzureTypedObjects} from './walk';
-import {convertVmssIp} from './convert_vmss';
 import {NormalizedAzureGraph} from './azure_graph_normalized';
-
-// TODO: Move `converters` to own file.
-const converters: IConverters = {
-  resourceGraph: convertResourceGraph,
-  subnet: convertSubnet,
-  vnet: convertVNet,
-  nsg: convertNsg,
-  ip: convertIp,
-  backendPool: convertBackendPool,
-  loadBalancer: convertLoadBalancer,
-  loadBalancerIp: convertLoadBalancerIp,
-  vmssIp: convertVmssIp,
-};
+import {convertResourceGraph} from './convert_resource_graph';
 
 export function convert(resourceGraphSpec: AzureResourceGraph): GraphSpec {
   //
@@ -75,19 +50,17 @@ export function convert(resourceGraphSpec: AzureResourceGraph): GraphSpec {
     azureGraph.addNode(spec);
   }
 
-  const services = new GraphServices(converters, symbols, azureGraph);
+  const services = new GraphServices(symbols, azureGraph);
 
   //
   // Convert the AzureResourceGraph
   //
   // Could also write
   //   converters.resourceGraph(services, resourceGraph);
-  services.convert.resourceGraph(services, resourceGraphSpec);
+  convertResourceGraph(services);
 
   // Emit the GraphSpec
   const graph = services.getLabyrinthGraphSpec();
 
   return graph;
 }
-
-export const DefaultConverterConfig = converters;

@@ -1,35 +1,53 @@
+import {AzureGraphNode} from './azure_graph_node';
 import {NodeKeyAndSourceIp} from './converters';
+import {SubnetNode} from './convert_subnet';
 import {GraphServices} from './graph_services';
-import {AzureIdReference, AzureIPConfiguration, AzureObjectType} from './types';
+import {AzureIPConfiguration, AzureObjectType} from './types';
 
 const KEY_INTERNET = 'Internet';
 
-export function convertKnownIp(
-  services: GraphServices,
-  ipConfig: AzureIPConfiguration
-): NodeKeyAndSourceIp {
-  if (ipConfig.type === AzureObjectType.LOCAL_IP) {
-    if (!ipConfig.properties.subnet) {
-      throw new TypeError(`Local IP '${ipConfig.id}' is not bound to a subnet`);
+export class IpNode extends AzureGraphNode<AzureIPConfiguration> {
+  constructor(input: AzureIPConfiguration) {
+    super(input.type as AzureObjectType, input);
+  }
+
+  *edges(): IterableIterator<string> {
+    if (this.value.type === AzureObjectType.LOCAL_IP) {
+      if (this.value.properties.subnet) {
+        yield this.value.properties.subnet.id;
+      }
     }
-    const subnet = services.index.dereference(ipConfig.properties.subnet);
-    return {
-      key: `${subnet.id}/inbound`,
-      destinationIp: ipConfig.properties.privateIPAddress,
-    };
-  } else {
-    return {key: KEY_INTERNET, destinationIp: ipConfig.properties.ipAddress};
-  }
-}
-
-export function convertIp(
-  services: GraphServices,
-  ipRefSpec: AzureIdReference
-): NodeKeyAndSourceIp {
-  if (!services.index.hasNode(ipRefSpec.id)) {
-    return services.convert.vmssIp(services, ipRefSpec);
   }
 
-  const ipConfig = services.index.dereference<AzureIPConfiguration>(ipRefSpec);
-  return convertKnownIp(services, ipConfig);
+  convert(services: GraphServices): NodeKeyAndSourceIp {
+    return {key: this.nodeKey(), destinationIp: this.ipAddress()};
+  }
+
+  private ipAddress(): string {
+    if (this.value.type === AzureObjectType.LOCAL_IP) {
+      if (!this.value.properties.subnet) {
+        throw new TypeError(
+          `Local IP '${this.value.id}' is not bound to a subnet`
+        );
+      }
+
+      return this.value.properties.privateIPAddress;
+    } else {
+      return this.value.properties.ipAddress;
+    }
+  }
+
+  private nodeKey(): string {
+    let key = KEY_INTERNET;
+
+    if (this.value.type === AzureObjectType.LOCAL_IP) {
+      key = `${this.subnet().value.id}/inbound`;
+    }
+
+    return key;
+  }
+
+  private subnet(): SubnetNode {
+    return this.first<SubnetNode>(AzureObjectType.SUBNET);
+  }
 }

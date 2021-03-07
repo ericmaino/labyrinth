@@ -1,6 +1,7 @@
 import {AzureTypedObject} from '../azure/types';
 
 import {AzureGraphNode, DefaultNode, IAzureGraphNode} from './azure_graph_node';
+import {IpNode} from './convert_ip';
 import {LoadBalancerNode} from './convert_load_balancer';
 import {NetworkInterfaceNode} from './convert_network_interface';
 import {SubnetNode} from './convert_subnet';
@@ -71,6 +72,9 @@ export class NormalizedAzureGraph extends GraphE<
         return new NetworkInterfaceNode(input);
       case AzureObjectType.LOAD_BALANCER:
         return new LoadBalancerNode(input);
+      case AzureObjectType.PUBLIC_IP:
+      case AzureObjectType.LOCAL_IP:
+        return new IpNode(input);
       default:
         return new DefaultNode(input);
     }

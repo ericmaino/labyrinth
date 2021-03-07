@@ -1,21 +1,14 @@
 import {GraphSpec, NodeSpec} from '../../graph';
 import {NormalizedAzureGraph} from './azure_graph_normalized';
 
-import {IConverters} from './converters';
 import {SymbolTable} from './symbol_table';
 
 export class GraphServices {
   readonly index: NormalizedAzureGraph;
-  readonly convert: IConverters;
   private readonly nodes: NodeSpec[] = [];
   readonly symbols: SymbolTable;
 
-  constructor(
-    converters: IConverters,
-    symbols: SymbolTable,
-    index: NormalizedAzureGraph
-  ) {
-    this.convert = converters;
+  constructor(symbols: SymbolTable, index: NormalizedAzureGraph) {
     this.symbols = symbols;
     this.index = index;
   }
