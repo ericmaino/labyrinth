@@ -42,7 +42,19 @@
         "<node_internals>/**"
       ],
       "program": "${workspaceFolder}/build/src/apps/convert.js",
-      "preLaunchTask": "tsc: build - tsconfig.json",
+      "preLaunchTask": "npm run compile",
+      "outFiles": [
+        "${workspaceFolder}/build/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "debug",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/build/src/apps/debug.js",
       "outFiles": [
         "${workspaceFolder}/build/**/*.js"
       ]

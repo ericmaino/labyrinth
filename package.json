@@ -22,6 +22,7 @@
   "repository": "https://github.com/MikeHopcroft/labyrinth",
   "scripts": {
     "docs": "node node_modules/prepress/build/src/apps/prepress.js documentation/src documentation",
+    "debug": "node build/src/apps/debug.js",
     "test": "mocha",
     "test-coverage": "nyc mocha",
     "lint": "gts lint",
@@ -30,6 +31,7 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
+    "predebug": "npm run clean && npm run compile",
     "pretest-coverage": "npm run compile",
     "posttest": "npm run lint"
   },
