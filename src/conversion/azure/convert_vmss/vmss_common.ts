@@ -28,7 +28,7 @@ export function isValidVMSSIpNic(id: string): boolean {
 }
 
 export function asNicConfigSpecId(input: AzureVMSSIpResult) {
-  return `${input.vmssId.id}/virtualmachines/${input.logicalId}/networkinterfaces/${input.interfaceConfig}`;
+  return `${input.vmssId.id}/virtualMachines/${input.logicalId}/networkInterfaces/${input.interfaceConfig}`;
 }
 
 export function parseAsVMSSIpConfiguration(

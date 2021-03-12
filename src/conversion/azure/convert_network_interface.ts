@@ -64,6 +64,7 @@ export function materializeNetworkInterface(
 
   services.addNode(inboundNode);
   services.addNode(outboundNode);
+  console.log(node.specId);
   services.defineServiceTag(node.serviceTag, ip);
 }
 

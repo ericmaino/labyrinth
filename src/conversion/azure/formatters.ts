@@ -2,14 +2,16 @@ import {hash} from '../../utilities/hash';
 import {AzureReference, AzureSubnet, SubnetKeys} from './types';
 
 export function normalizedSymbolKey(input: string): string {
-  const parts = input.split(/[/]/).reverse();
+  const normalizedInput = input.toLowerCase();
+  const parts = normalizedInput.split(/[/]/).reverse();
   const head = parts.slice(0, 2).join('_');
-  const signature = hash(input).slice(0, 6);
+  const signature = hash(normalizedInput).slice(0, 6);
   return [head, 'ServiceTag', signature].join('_').split(/[*/-]/).join('_');
 }
 
 export function normalizedNodeKey(input: string): string {
-  return input.split('/').slice(6).reverse().join('/');
+  const normalizedInput = input.toLowerCase();
+  return normalizedInput.split('/').slice(6).reverse().join('/');
 }
 
 export function subnetKeys(input: AzureReference<AzureSubnet>): SubnetKeys {

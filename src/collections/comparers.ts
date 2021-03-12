@@ -6,7 +6,7 @@ class CaseInsensitive implements IComparer<string> {
   }
 
   key(input: string): string {
-    return input.toLowerCase();
+    return input;
   }
 }
 
