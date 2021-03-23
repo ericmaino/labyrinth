@@ -19,6 +19,7 @@ import {
   AzureLoadBalancerInboundNatRule,
   AzureLoadBalancerRule,
   AzureLoadBalancerBackendPool,
+  ruleProtocol,
 } from '../../../src/conversion/azure';
 
 import {createMock} from './mocks';
@@ -370,7 +371,7 @@ export const natRule1: AzureLoadBalancerInboundNatRule = {
     backendIPConfiguration: reference(privateIp1),
     frontendIPConfiguration: reference(frontEndIp1Id),
     frontendPort: 5000,
-    protocol: 'TCP',
+    protocol: ruleProtocol.TCP,
   },
 };
 
@@ -395,7 +396,7 @@ export const poolRule1: AzureLoadBalancerRule = {
     backendAddressPool: reference(backendPool1),
     frontendIPConfiguration: reference(frontEndIp1Id),
     frontendPort: 5000,
-    protocol: 'TCP',
+    protocol: ruleProtocol.TCP,
   },
 };
 
