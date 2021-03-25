@@ -33,6 +33,7 @@ function main() {
     console.log('Conversion complete.');
     printTypeUsageReport(unusedTypes);
   } catch (e) {
+    console.log(e);
     handleError(e);
   }
 
