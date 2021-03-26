@@ -1,7 +1,7 @@
 [
   {
     "extendedLocation": null,
-    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Compute/virtualMachines/vm-A-01",
+    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-BAD-VNET/providers/Microsoft.Compute/virtualMachines/vm-A-01",
     "identity": null,
     "kind": "",
     "location": "westus2",
@@ -43,7 +43,8 @@
           "disablePasswordAuthentication": true,
           "patchSettings": {
             "patchMode": "ImageDefault"
-          }
+          },
+          "provisionVMAgent": true
         },
         "requireGuestProvisionSignal": true,
         "secrets": []
@@ -83,7 +84,7 @@
   },
   {
     "extendedLocation": null,
-    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Compute/virtualMachines/vm-B-01",
+    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-BAD-VNET/providers/Microsoft.Compute/virtualMachines/vm-B-01",
     "identity": null,
     "kind": "",
     "location": "westus2",
@@ -125,7 +126,8 @@
           "disablePasswordAuthentication": true,
           "patchSettings": {
             "patchMode": "ImageDefault"
-          }
+          },
+          "provisionVMAgent": true
         },
         "requireGuestProvisionSignal": true,
         "secrets": []
@@ -162,6 +164,97 @@
     "tenantId": "00000000-0000-0000-0000-000000000000",
     "type": "microsoft.compute/virtualmachines",
     "zones": ["1"]
+  },
+  {
+    "extendedLocation": null,
+    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Compute/virtualMachines/VM-B-02",
+    "identity": null,
+    "kind": "",
+    "location": "westus2",
+    "managedBy": "",
+    "name": "VM-B-02",
+    "plan": null,
+    "properties": {
+      "diagnosticsProfile": {
+        "bootDiagnostics": {
+          "enabled": true
+        }
+      },
+      "extended": {
+        "instanceView": {
+          "computerName": "VM-B-02",
+          "powerState": {
+            "code": "PowerState/running",
+            "displayStatus": "VM running",
+            "level": "Info"
+          }
+        }
+      },
+      "hardwareProfile": {
+        "vmSize": "Standard_B1s"
+      },
+      "networkProfile": {
+        "networkInterfaces": [
+          {
+            "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/networkInterfaces/vm-b-02487",
+            "resourceGroup": "x-bad-vnet"
+          }
+        ]
+      },
+      "osProfile": {
+        "adminUsername": "azureuser",
+        "allowExtensionOperations": true,
+        "computerName": "VM-B-02",
+        "linuxConfiguration": {
+          "disablePasswordAuthentication": true,
+          "patchSettings": {
+            "patchMode": "ImageDefault"
+          },
+          "provisionVMAgent": true,
+          "ssh": {
+            "publicKeys": [
+              {
+                "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtwRoLbiKHYYILStIrOGV0yrSN\r\nkNeTNgXX2Y8aOX24nwTGYKF+s7hcYVhnhQXqU6vx5FwlyIo7frxAX8MV8kFyeeUx\r\nNWqubDIXlBsbNbYwhiWGvn+ZXmDf7dv4tCp9qp5QCI/I7aLZk/1X9pdrD9tX1czM\r\nv6qJaCr83BDdWPjv9KNzRJFF3b2mnG8aDYg+rF85+gqF0nB5M72guwP7ZZKByB9K\r\n2INH2VVyXpQx7KxLUy4BHA6AxrXPRSYNPPz3nGobOSylD6C+hGmmiS3fuLMQ5M8f\r\nmaPwikDOa5BxbvaqWFo9oyZZRCG0OrEhZymKUT/kTdrAXBxTzrLH9hEZU21nVHlz\r\nfFozuj0wHl1OTyxYCo8IpFVn+o8ifroMqtotcsHw4zHg9RPBFGV7WCGPNkFGzieI\r\narNG4C2NSTpv7+FUN2BfzvwlAbCshS6+osXLM/PeLaEcDLI4wjpDohb503KsytsG\r\ne88rZfG0/CCgbcM2frLMw8sqtDHzw/67UT0aA8c= generated-by-azure\r\n",
+                "path": "/home/azureuser/.ssh/authorized_keys"
+              }
+            ]
+          }
+        },
+        "requireGuestProvisionSignal": true,
+        "secrets": []
+      },
+      "provisioningState": "Succeeded",
+      "storageProfile": {
+        "dataDisks": [],
+        "imageReference": {
+          "exactVersion": "18.04.202103250",
+          "offer": "UbuntuServer",
+          "publisher": "Canonical",
+          "sku": "18.04-LTS",
+          "version": "latest"
+        },
+        "osDisk": {
+          "caching": "ReadWrite",
+          "createOption": "FromImage",
+          "diskSizeGB": 30,
+          "managedDisk": {
+            "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Compute/disks/VM-B-02_disk1_5e11f88bfb9144dd9c100caa082db978",
+            "resourceGroup": "x-bad-vnet",
+            "storageAccountType": "Premium_LRS"
+          },
+          "name": "VM-B-02_disk1_5e11f88bfb9144dd9c100caa082db978",
+          "osType": "Linux"
+        }
+      },
+      "vmId": "2ece14e8-f4cf-4c1f-962f-ed035ad484cb"
+    },
+    "resourceGroup": "x-bad-vnet",
+    "sku": null,
+    "subscriptionId": "00000000-0000-0000-0000-000000000000",
+    "tags": null,
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "type": "microsoft.compute/virtualmachines",
+    "zones": null
   },
   {
     "extendedLocation": null,
@@ -561,7 +654,7 @@
       "hostedWorkloads": [],
       "ipConfigurations": [
         {
-          "etag": "W/\"4446acc2-c340-4367-8423-144349db811c\"",
+          "etag": "W/\"0e0577b9-2068-47a6-8f3c-fd5b846bc76d\"",
           "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/networkInterfaces/vm-a-01125/ipConfigurations/ipconfig1",
           "name": "ipconfig1",
           "properties": {
@@ -577,7 +670,7 @@
             "privateIPAllocationMethod": "Dynamic",
             "provisioningState": "Succeeded",
             "subnet": {
-              "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/virtualNetworks/x-bad-vnet-a/subnets/subnet-a",
+              "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/virtualNetworks/x-bad-vnet-a/subnets/subnet-a-20",
               "resourceGroup": "x-bad-vnet"
             }
           },
@@ -585,7 +678,7 @@
           "type": "Microsoft.Network/networkInterfaces/ipConfigurations"
         }
       ],
-      "macAddress": "00-0D-3A-FE-DD-D7",
+      "macAddress": "00-0D-3A-6D-63-1C",
       "nicType": "Standard",
       "primary": true,
       "provisioningState": "Succeeded",
@@ -669,6 +762,106 @@
   },
   {
     "extendedLocation": null,
+    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/networkInterfaces/vm-b-02487",
+    "identity": null,
+    "kind": "",
+    "location": "westus2",
+    "managedBy": "",
+    "name": "vm-b-02487",
+    "plan": null,
+    "properties": {
+      "dnsSettings": {
+        "appliedDnsServers": [],
+        "dnsServers": [],
+        "internalDomainNameSuffix": "0bnmkr5mp1ueboddl3vr01j5hd.xx.internal.cloudapp.net"
+      },
+      "enableAcceleratedNetworking": false,
+      "enableIPForwarding": false,
+      "hostedWorkloads": [],
+      "ipConfigurations": [
+        {
+          "etag": "W/\"18a000a8-c9b6-4bd0-b7f3-d8a071159c0a\"",
+          "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/networkInterfaces/vm-b-02487/ipConfigurations/ipconfig1",
+          "name": "ipconfig1",
+          "properties": {
+            "loadBalancerBackendAddressPools": [
+              {
+                "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/loadBalancers/ilb-b/backendAddressPools/pool-b",
+                "resourceGroup": "x-bad-vnet"
+              }
+            ],
+            "primary": true,
+            "privateIPAddress": "192.168.10.7",
+            "privateIPAddressVersion": "IPv4",
+            "privateIPAllocationMethod": "Dynamic",
+            "provisioningState": "Succeeded",
+            "publicIPAddress": {
+              "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/publicIPAddresses/VM-B-02-ip",
+              "resourceGroup": "x-bad-vnet"
+            },
+            "subnet": {
+              "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/virtualNetworks/x-bad-vnet-b/subnets/subnet-b",
+              "resourceGroup": "x-bad-vnet"
+            }
+          },
+          "resourceGroup": "x-bad-vnet",
+          "type": "Microsoft.Network/networkInterfaces/ipConfigurations"
+        }
+      ],
+      "macAddress": "00-0D-3A-F5-C6-FF",
+      "nicType": "Standard",
+      "primary": true,
+      "provisioningState": "Succeeded",
+      "resourceGuid": "7f856089-99d8-4f7f-89a4-634f46c1af11",
+      "tapConfigurations": [],
+      "virtualMachine": {
+        "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Compute/virtualMachines/VM-B-02",
+        "resourceGroup": "x-bad-vnet"
+      }
+    },
+    "resourceGroup": "x-bad-vnet",
+    "sku": null,
+    "subscriptionId": "00000000-0000-0000-0000-000000000000",
+    "tags": null,
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "type": "microsoft.network/networkinterfaces",
+    "zones": null
+  },
+  {
+    "extendedLocation": null,
+    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/publicIPAddresses/VM-B-02-ip",
+    "identity": null,
+    "kind": "",
+    "location": "westus2",
+    "managedBy": "",
+    "name": "VM-B-02-ip",
+    "plan": null,
+    "properties": {
+      "idleTimeoutInMinutes": 4,
+      "ipAddress": "20.80.145.57",
+      "ipConfiguration": {
+        "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/networkInterfaces/vm-b-02487/ipConfigurations/ipconfig1",
+        "resourceGroup": "x-bad-vnet"
+      },
+      "ipTags": [],
+      "provisioningState": "Succeeded",
+      "publicIPAddressVersion": "IPv4",
+      "publicIPAllocationMethod": "Static",
+      "resourceGuid": "921153b8-2d45-40ed-9707-ca7180b28a57"
+    },
+    "resourceGroup": "x-bad-vnet",
+    "sku": {
+      "name": "Standard",
+      "tier": "Regional"
+    },
+    "subscriptionId": "00000000-0000-0000-0000-000000000000",
+    "tags": null,
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "type": "microsoft.network/publicipaddresses",
+    "zones": ["1", "2", "3"]
+  },
+  {
+    "extendedLocation": null,
     "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/publicIPAddresses/public-lb-ip",
     "identity": null,
     "kind": "",
@@ -718,9 +911,9 @@
       "resourceGuid": "d95a3f1c-2957-49be-84c8-c6458b0b8454",
       "subnets": [
         {
-          "etag": "W/\"212e0375-7d53-4db1-bb75-b7106829e076\"",
-          "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/virtualNetworks/x-bad-vnet-a/subnets/subnet-a",
-          "name": "subnet-a",
+          "etag": "W/\"5c94b90e-351d-4eb8-b15b-9ef771772de6\"",
+          "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/x-bad-vnet/providers/Microsoft.Network/virtualNetworks/x-bad-vnet-a/subnets/subnet-a-20",
+          "name": "subnet-a-20",
           "properties": {
             "addressPrefix": "192.168.20.0/28",
             "delegations": [],
@@ -732,7 +925,8 @@
             ],
             "privateEndpointNetworkPolicies": "Enabled",
             "privateLinkServiceNetworkPolicies": "Enabled",
-            "provisioningState": "Succeeded"
+            "provisioningState": "Succeeded",
+            "serviceEndpoints": []
           },
           "resourceGroup": "x-bad-vnet",
           "type": "Microsoft.Network/virtualNetworks/subnets"

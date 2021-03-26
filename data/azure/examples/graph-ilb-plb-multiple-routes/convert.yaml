@@ -1,15 +1,31 @@
 nodes:
   - key: publicIp1/inbound
     routes:
+      - destination: AzureBackbone/inbound
+        override:
+          destinationIp: 192.168.10.7
+  - key: publicIp1/outbound
+    routes:
+      - destination: Internet
+        override:
+          sourceIp: 20.80.145.57
+  - key: publicIp2/inbound
+    routes:
       - destination: loadBalancer1
   - key: Internet
     endpoint: true
     routes:
       - destination: publicIp1/inbound
         constraints:
+          destinationIp: 20.80.145.57
+      - destination: publicIp2/inbound
+        constraints:
           destinationIp: 52.151.49.75
   - key: AzureBackbone/outbound
-    routes: []
+    routes:
+      - destination: publicIp1/outbound
+        constraints:
+          sourceIp: 192.168.10.7
   - key: loadBalancer1
     routes:
       - destination: vnet1/inbound
@@ -39,7 +55,7 @@ nodes:
       - destination: vnet1/router
   - key: subnet1/inbound
     name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a/subnets/subnet-a/inbound
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a/subnets/subnet-a-20/inbound
     routes:
       - destination: nic1/inbound
         constraints:
@@ -96,6 +112,24 @@ nodes:
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/networkinterfaces/vm-b-01466/outbound
     routes:
       - destination: vnet2/router
+  - key: vm3
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.compute/virtualmachines/vm-b-02
+    endpoint: true
+    routes:
+      - destination: nic3/outbound
+        constraints:
+          sourceIp: 192.168.10.7
+  - key: nic3/inbound
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/networkinterfaces/vm-b-02487/inbound
+    routes:
+      - destination: vm3
+  - key: nic3/outbound
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/networkinterfaces/vm-b-02487/outbound
+    routes:
+      - destination: vnet2/router
   - key: subnet2/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-b/subnets/subnet-b/inbound
@@ -103,6 +137,9 @@ nodes:
       - destination: nic2/inbound
         constraints:
           destinationIp: 192.168.10.4
+      - destination: nic3/inbound
+        constraints:
+          destinationIp: 192.168.10.7
   - key: vnet2/router
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-b
