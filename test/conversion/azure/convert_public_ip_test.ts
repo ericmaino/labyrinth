@@ -157,7 +157,7 @@ export default function test() {
       assert.deepEqual(nodes, expectedNodes);
     });
 
-    it('front end load balancer - pool', () => {
+    it.skip('front end load balancer - pool', () => {
       const {services, mocks} = createGraphServicesMock();
       // TODO: REVIEW: do we need to add this specific rule?
       // Or just any rule that can be dereferenced?
