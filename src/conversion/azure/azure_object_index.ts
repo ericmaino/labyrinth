@@ -1,14 +1,19 @@
+import {AddressAllocator} from './address_allocator';
+import {isValidVMSSIpConfigId, isValidVMSSIpNic} from './azure_id';
 import {
   AnyAzureObject,
+  AzureIndex,
   AzureObjectBase,
   AzureObjectType,
   AzureReference,
   AzureResourceGraph,
 } from './azure_types';
+import {createVmssIpSpec, createVmssNetworkIntefaceSpec} from './convert_vmss';
 
 import {walkAzureTypedObjects} from './walk';
 
-export class AzureObjectIndex {
+export class AzureObjectIndex implements AzureIndex {
+  readonly allocator: AddressAllocator;
   private readonly idToAzureObject = new Map<string, AnyAzureObject>();
   private readonly typeToAzureObjects = new Map<
     AzureObjectType,
@@ -20,6 +25,7 @@ export class AzureObjectIndex {
   >();
 
   constructor(spec: AzureResourceGraph) {
+    this.allocator = new AddressAllocator();
     for (const item of walkAzureTypedObjects(spec)) {
       this.add(item as AnyAzureObject);
     }
@@ -63,10 +69,15 @@ export class AzureObjectIndex {
   // Also, do we wanta dereference() method that knows about AzureReferences
   // or should we just rely on the basic getItem()?
   dereference<T extends AnyAzureObject>(ref: AzureReference<T>) {
-    const item = this.idToAzureObject.get(ref.id);
+    let item = this.idToAzureObject.get(ref.id);
+
     if (item === undefined) {
-      const message = `Unknown Azure resource graph id "${ref.id}"`;
-      throw new TypeError(message);
+      item = realizeSyntheticSpec(ref.id, this);
+
+      if (item === undefined) {
+        const message = `Unknown Azure resource graph id "${ref.id}"`;
+        throw new TypeError(message);
+      }
     }
     return item as T;
   }
@@ -106,4 +117,19 @@ export class AzureObjectIndex {
     const idParts = input.id.split('/');
     return idParts.length === 9;
   }
+}
+
+function realizeSyntheticSpec(
+  id: string,
+  index: AzureObjectIndex
+): AnyAzureObject | undefined {
+  if (isValidVMSSIpConfigId(id)) {
+    const nic = index.getParentId({id, resourceGroup: ''});
+    createVmssNetworkIntefaceSpec(nic.id, index);
+    return createVmssIpSpec(id, index);
+  } else if (isValidVMSSIpNic(id)) {
+    return createVmssNetworkIntefaceSpec(id, index);
+  }
+
+  return undefined;
 }
