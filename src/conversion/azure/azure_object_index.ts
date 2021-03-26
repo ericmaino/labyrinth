@@ -33,8 +33,9 @@ export class AzureObjectIndex implements AzureIndex {
 
   add(item: AnyAzureObject) {
     if (this.idToAzureObject.has(item.id)) {
-      const message = `Duplicate Azure resource graph id "${item.id}"`;
-      throw new TypeError(message);
+      return;
+      // const message = `Duplicate Azure resource graph id "${item.id}"`;
+      // throw new TypeError(message);
     }
     this.idToAzureObject.set(item.id, item);
 

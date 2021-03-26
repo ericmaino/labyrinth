@@ -43,6 +43,11 @@ export function convert(
     },
     {
       dimension: 'protocol',
+      symbol: 'Udp',
+      range: 'udp',
+    },
+    {
+      dimension: 'protocol',
       symbol: 'TCP',
       range: 'tcp',
     },
