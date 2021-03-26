@@ -1,4 +1,5 @@
-import {RoutingRuleSpec} from '../../../graph';
+import {frontEndIp1Id} from '../../../../test/conversion/azure/sample_resource_graph';
+import {Graph, RoutingRuleSpec} from '../../../graph';
 
 import {
   AzureLoadBalancerBackendPool,
@@ -7,68 +8,87 @@ import {
   AzureLoadBalancerInboundRule,
   AzureLoadBalancerRule,
   AzurePrivateIP,
+  AzurePublicIP,
 } from '../azure_types';
 
 import {GraphServices} from '../graph_services';
 
-export function convertLoadBalancerFrontEndIp(
+export function createLoadBalancerRoutes(
   services: GraphServices,
   spec: AzureLoadBalancerFrontEndIp,
   backboneKey: string
-): RoutingRuleSpec {
+): RoutingRuleSpec[] {
   services.nodes.markTypeAsUsed(spec);
 
-  const key = services.nodes.createKey(spec);
-
   const routes: RoutingRuleSpec[] = [];
+  const inboundIp = getIp(services, spec);
 
-  for (const lbRuleRef of spec.properties.loadBalancingRules ?? []) {
-    const lbRule = services.index.dereference<AzureLoadBalancerInboundRule>(
-      lbRuleRef
+  if (inboundIp) {
+    for (const lbRuleRef of spec.properties.loadBalancingRules ?? []) {
+      const lbRule = services.index.dereference<AzureLoadBalancerInboundRule>(
+        lbRuleRef
+      );
+      services.nodes.markTypeAsUsed(lbRule);
+
+      const backendPool = services.index.dereference<AzureLoadBalancerBackendPool>(
+        lbRule.properties.backendAddressPool
+      );
+      services.nodes.markTypeAsUsed(backendPool);
+
+      const backendIPs = backendPool.properties.backendIPConfigurations.map(
+        ip =>
+          services.index.dereference<AzurePrivateIP>(ip).properties
+            .privateIPAddress
+      );
+
+      routes.push(
+        createInboundRoute(lbRule, inboundIp, backboneKey, ...backendIPs)
+      );
+    }
+
+    for (const natRuleSpec of spec.properties.inboundNatRules ?? []) {
+      const natRule = services.index.dereference<AzureLoadBalancerInboundNatRule>(
+        natRuleSpec
+      );
+      services.nodes.markTypeAsUsed(natRule);
+
+      const backendIp = services.index.dereference<AzurePrivateIP>(
+        natRule.properties.backendIPConfiguration
+      );
+      services.nodes.markTypeAsUsed(backendIp);
+
+      routes.push(
+        createInboundRoute(
+          natRule,
+          inboundIp,
+          backboneKey,
+          backendIp.properties.privateIPAddress
+        )
+      );
+    }
+  }
+  return routes;
+}
+
+function getIp(
+  services: GraphServices,
+  spec: AzureLoadBalancerFrontEndIp
+): string | undefined {
+  let ip = spec.properties.privateIPAddress;
+
+  if (!ip && spec.properties.publicIPAddress) {
+    const publicIpSpec = services.index.dereference<AzurePublicIP>(
+      spec.properties.publicIPAddress
     );
-    services.nodes.markTypeAsUsed(lbRule);
-
-    const backendPool = services.index.dereference<AzureLoadBalancerBackendPool>(
-      lbRule.properties.backendAddressPool
-    );
-    services.nodes.markTypeAsUsed(backendPool);
-
-    const backendIPs = backendPool.properties.backendIPConfigurations.map(
-      ip =>
-        services.index.dereference<AzurePrivateIP>(ip).properties
-          .privateIPAddress
-    );
-
-    routes.push(createInboundRoute(lbRule, backboneKey, ...backendIPs));
+    ip = publicIpSpec.properties.ipAddress;
   }
 
-  for (const natRuleSpec of spec.properties.inboundNatRules ?? []) {
-    const natRule = services.index.dereference<AzureLoadBalancerInboundNatRule>(
-      natRuleSpec
-    );
-    services.nodes.markTypeAsUsed(natRule);
-
-    const backendIp = services.index.dereference<AzurePrivateIP>(
-      natRule.properties.backendIPConfiguration
-    );
-    services.nodes.markTypeAsUsed(backendIp);
-
-    routes.push(
-      createInboundRoute(
-        natRule,
-        backboneKey,
-        backendIp.properties.privateIPAddress
-      )
-    );
-  }
-
-  services.nodes.add({key, routes});
-
-  return {destination: key};
+  return ip;
 }
 
 function createInboundRoute(
   spec: AzureLoadBalancerRule,
+  frontEndIp: string,
   subnetKey: string,
   ...backendIps: string[]
 ): RoutingRuleSpec {
@@ -77,6 +97,7 @@ function createInboundRoute(
   const ruleSpec: RoutingRuleSpec = {
     destination: subnetKey,
     constraints: {
+      destinationIp: frontEndIp,
       destinationPort: rule.frontendPort.toString(),
       protocol: rule.protocol,
     },

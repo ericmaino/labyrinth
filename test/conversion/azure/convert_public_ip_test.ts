@@ -168,10 +168,6 @@ export default function test() {
         destination: 'abc',
       };
 
-      mocks.loadBalancerFrontend.action(() => {
-        return route;
-      });
-
       const backboneKey = 'backbone';
       const internetKey = 'internet';
 
@@ -201,13 +197,6 @@ export default function test() {
         outbound: [],
       };
       assert.deepEqual(result, expectedResult);
-
-      // Verify that loadBalancerFrontend() was invoked correctly.
-      const log = mocks.loadBalancerFrontend.log();
-      assert.equal(log.length, 1);
-      // assert.equal(log[0].params[1], frontEndIpWithNatRule);
-      assert.equal(log[0].params[1], frontEndIpWithPoolRule);
-      assert.equal(log[0].params[2], backboneKey);
 
       // Verify graph
       const expectedNodes: NodeSpec[] = [

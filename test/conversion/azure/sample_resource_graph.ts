@@ -36,8 +36,7 @@ export function createGraphServicesMock() {
   const fake: IConverters = {} as IConverters;
 
   const mocks = {
-    internalLoadBalancer: createMock(fake.internalLoadBalancer),
-    loadBalancerFrontend: createMock(fake.loadBalancerFrontend),
+    loadBalancer: createMock(fake.loadBalancer),
     nic: createMock(fake.nic),
     nsg: createMock(fake.nsg),
     privateIp: createMock(fake.privateIp),

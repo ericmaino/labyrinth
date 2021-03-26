@@ -4,7 +4,6 @@ import {RuleSpec} from '../../rules';
 import {
   AzureIPConfiguration,
   AzureLoadBalancer,
-  AzureLoadBalancerFrontEndIp,
   AzureNetworkInterface,
   AzureNetworkSecurityGroup,
   AzurePublicIP,
@@ -24,16 +23,11 @@ export interface NSGRuleSpecs {
 // converters with resorting to monkey patching.
 //
 export interface IConverters {
-  internalLoadBalancer(
+  loadBalancer(
     services: GraphServices,
     spec: AzureLoadBalancer,
     vnetKey: string
-  ): SimpleRoutingRuleSpec;
-  loadBalancerFrontend(
-    services: GraphServices,
-    spec: AzureLoadBalancerFrontEndIp,
-    backboneKey: string
-  ): RoutingRuleSpec;
+  ): SimpleRoutingRuleSpec | undefined;
   nic(
     services: GraphServices,
     spec: AzureNetworkInterface,

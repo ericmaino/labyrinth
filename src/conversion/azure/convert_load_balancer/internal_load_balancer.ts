@@ -2,31 +2,33 @@ import {RoutingRuleSpec, SimpleRoutingRuleSpec} from '../../../graph';
 
 import {AzureLoadBalancer} from '../azure_types';
 import {GraphServices} from '../graph_services';
+import {createLoadBalancerRoutes} from './load_balancer_front_end_ip';
 
-export function convertInternalLoadBalancer(
+export function convertLoadBalancer(
   services: GraphServices,
   spec: AzureLoadBalancer,
   vnetNodeKey: string
-): SimpleRoutingRuleSpec {
+): SimpleRoutingRuleSpec | undefined {
   const loadBalancerKey = services.nodes.createKey(spec);
   const lbRoutes: RoutingRuleSpec[] = [];
   const ips: string[] = [];
   services.nodes.markTypeAsUsed(spec);
 
   for (const frontendSpec of spec.properties.frontendIPConfigurations) {
-    if (!frontendSpec.properties.privateIPAddress) {
-      throw new TypeError('Invalid load balancer IP configuration');
+    if (frontendSpec.properties.privateIPAddress) {
+      const ip = frontendSpec.properties.privateIPAddress;
+      ips.push(ip);
     }
-    const ip = frontendSpec.properties.privateIPAddress;
-    ips.push(ip);
 
-    const route = services.convert.loadBalancerFrontend(
+    const routes = createLoadBalancerRoutes(
       services,
       frontendSpec,
       vnetNodeKey
     );
 
-    lbRoutes.push(route);
+    if (routes) {
+      lbRoutes.push(...routes);
+    }
   }
 
   services.nodes.add({
@@ -34,12 +36,16 @@ export function convertInternalLoadBalancer(
     routes: lbRoutes,
   });
 
-  return {
-    destination: loadBalancerKey,
-    constraints: {
-      destinationIp: ips.join(','),
-    },
-  };
+  if (ips.length > 0) {
+    return {
+      destination: loadBalancerKey,
+      constraints: {
+        destinationIp: ips.join(','),
+      },
+    };
+  }
+
+  return undefined;
 }
 
 export function isInternalLoadBalancer(spec: AzureLoadBalancer): boolean {
