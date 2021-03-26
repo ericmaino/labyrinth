@@ -1,0 +1,161 @@
+Options summary:
+  Not modeling source ip address spoofing (use -s flag to enable).
+  Displaying endpoints and routing nodes. (-r)
+  Displaying paths (-p or -v).
+  Verbose mode (-v).
+Backprojecting paths past NAT rewrites. (-b)
+
+Nodes:
+  frontend1: 
+  publicIp1/inbound: 
+  Internet:  (endpoint)
+  AzureBackbone/outbound: 
+  vm1:  (endpoint)
+  nic1/inbound: 
+  nic1/outbound: 
+  subnet1/inbound: 
+  vnet1/router: vnet2
+  vnet1/inbound: 
+  frontend2: 
+  loadBalancer1: 
+  vm2:  (endpoint)
+  nic2/inbound: 
+  nic2/outbound: 
+  subnet2/inbound: 
+  vnet2/router: vnet2
+  vnet2/inbound: 
+  AzureBackbone/inbound: 
+
+Nodes reachable from AzureBackbone/inbound:
+
+frontend1:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+Internet:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+AzureBackbone/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm1:
+  routes:
+    destination ip: 192.168.10.4
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet1/inbound => nic1/inbound => vm1
+      destination ip: 192.168.10.4
+
+nic1/inbound:
+  routes:
+    destination ip: 192.168.10.4
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet1/inbound => nic1/inbound
+      destination ip: 192.168.10.4
+
+nic1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet1/inbound:
+  routes:
+    destination ip: 192.168.10.0/28
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet1/inbound
+      destination ip: 192.168.10.0/28
+
+vnet1/router:
+  routes:
+    destination ip: vnet2
+
+  paths:
+    AzureBackbone/inbound => vnet1/router
+      destination ip: vnet2
+
+vnet1/inbound:
+  routes:
+    destination ip: vnet2
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound
+      destination ip: vnet2
+
+frontend2:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+loadBalancer1:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet2/router:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+

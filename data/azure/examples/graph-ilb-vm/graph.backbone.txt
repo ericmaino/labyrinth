@@ -1,0 +1,317 @@
+Options summary:
+  Not modeling source ip address spoofing (use -s flag to enable).
+  Displaying endpoints and routing nodes. (-r)
+  Displaying paths (-p or -v).
+  Verbose mode (-v).
+Backprojecting paths past NAT rewrites. (-b)
+
+Nodes:
+  publicIp1/inbound: 
+  publicIp2/inbound: 
+  publicIp3/inbound: 
+  Internet:  (endpoint)
+  AzureBackbone/outbound: 
+  frontend1: 
+  loadBalancer1: 
+  subnet1/inbound: 
+  vm1:  (endpoint)
+  nic1/inbound: 
+  nic1/outbound: 
+  subnet2/inbound: 
+  subnet2/outbound: 
+  subnet3/inbound: 
+  subnet3/outbound: 
+  vm2:  (endpoint)
+  nic2/inbound: 
+  nic2/outbound: 
+  subnet4/inbound: 
+  subnet5/inbound: 
+  vnet1/router: vnet1
+  vnet1/inbound: 
+  AzureBackbone/inbound: 
+
+Nodes reachable from AzureBackbone/inbound:
+
+publicIp1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp3/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+Internet:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+AzureBackbone/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+frontend1:
+  routes:
+    destination ip: 192.168.200.5
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1
+      destination ip: 192.168.200.5
+
+loadBalancer1:
+  routes:
+    destination ip: 192.168.200.5
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1
+      destination ip: 192.168.200.5
+
+subnet1/inbound:
+  routes:
+    destination ip: 192.168.201.0/24
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet1/inbound
+      destination ip: 192.168.201.0/24
+
+vm1:
+  routes:
+    source ip: AzureLoadBalancer, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+    destination ip: 192.168.200.4
+
+    destination ip: 192.168.200.4
+    destination port: ssh
+    protocol: TCP
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1 => vnet1/inbound => subnet2/inbound => nic1/inbound => vm1
+      source ip: AzureLoadBalancer
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+
+      source ip: AzureLoadBalancer
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+
+      source ip: vnet1
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+
+      source ip: vnet1
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+
+      source ip: AzureLoadBalancer, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic1/inbound => vm1
+      source ip: AzureLoadBalancer
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+      source ip: AzureLoadBalancer
+      destination ip: 192.168.200.4
+
+      source ip: vnet1
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+      source ip: vnet1
+      destination ip: 192.168.200.4
+
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+      source ip: AzureLoadBalancer, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+nic1/inbound:
+  routes:
+    source ip: AzureLoadBalancer, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+    destination ip: 192.168.200.4
+
+    destination ip: 192.168.200.4
+    destination port: ssh
+    protocol: TCP
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1 => vnet1/inbound => subnet2/inbound => nic1/inbound
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+
+      source ip: AzureLoadBalancer, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic1/inbound
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+      source ip: AzureLoadBalancer, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+      destination ip: 192.168.200.4
+
+nic1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet2/inbound:
+  routes:
+    destination ip: 192.168.200.4
+    destination port: ssh
+    protocol: TCP
+
+    destination ip: 192.168.200.0-192.168.200.4, 192.168.200.6-192.168.200.255
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1 => vnet1/inbound => subnet2/inbound
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet2/inbound
+      destination ip: 192.168.200.0-192.168.200.4, 192.168.200.6-192.168.200.255
+
+subnet2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet3/inbound:
+  routes:
+    destination ip: 192.168.202.0/28
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet3/inbound
+      destination ip: 192.168.202.0/28
+
+subnet3/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2:
+  routes:
+    destination ip: 192.168.202.20
+    destination port: ssh
+    protocol: TCP
+
+    destination ip: 192.168.202.20
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1 => vnet1/inbound => subnet4/inbound => nic2/inbound => vm2
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet4/inbound => nic2/inbound => vm2
+      destination ip: 192.168.202.20
+
+nic2/inbound:
+  routes:
+    destination ip: 192.168.202.20
+    destination port: ssh
+    protocol: TCP
+
+    destination ip: 192.168.202.20
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1 => vnet1/inbound => subnet4/inbound => nic2/inbound
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet4/inbound => nic2/inbound
+      destination ip: 192.168.202.20
+
+nic2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet4/inbound:
+  routes:
+    destination ip: 192.168.202.20
+    destination port: ssh
+    protocol: TCP
+
+    destination ip: 192.168.202.16/28
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1 => vnet1/inbound => subnet4/inbound
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet4/inbound
+      destination ip: 192.168.202.16/28
+
+subnet5/inbound:
+  routes:
+    destination ip: 192.168.202.64/26
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet5/inbound
+      destination ip: 192.168.202.64/26
+
+vnet1/router:
+  routes:
+    destination ip: vnet1
+
+  paths:
+    AzureBackbone/inbound => vnet1/router
+      destination ip: vnet1
+
+vnet1/inbound:
+  routes:
+    destination ip: 192.168.200.4, 192.168.202.20
+    destination port: ssh
+    protocol: TCP
+
+    destination ip: 192.168.200.0-192.168.200.4, 192.168.200.6-192.168.202.31, 192.168.202.64/26
+
+  paths:
+    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend1 => vnet1/inbound
+      destination ip: 192.168.200.5
+      destination port: 3000
+      protocol: TCP
+    AzureBackbone/inbound => vnet1/router => vnet1/inbound
+      destination ip: 192.168.200.0-192.168.200.4, 192.168.200.6-192.168.202.31, 192.168.202.64/26
+
