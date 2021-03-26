@@ -70,12 +70,17 @@ function publicIpWithPrivateIp(
     throw new TypeError('Invalid Public IP Configuration');
   }
 
+  const vnetId = services.index.getParentId(privateIpSpec.properties.subnet);
+  const vnetSpec = services.index.dereference(vnetId);
+  const vnetKey = services.nodes.createKey(vnetSpec);
+  const vnetRouterKey = services.nodes.createKeyVariant(vnetKey, 'router');
+
   // Create inbound node
   services.nodes.add({
     key: inboundKey,
     routes: [
       {
-        destination: backboneKey,
+        destination: vnetRouterKey,
         override: {
           destinationIp: privateIpSpec.properties.privateIPAddress,
         },

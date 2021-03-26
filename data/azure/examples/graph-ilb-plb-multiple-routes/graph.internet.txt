@@ -16,8 +16,8 @@ Nodes:
   nic1/inbound: 
   nic1/outbound: 
   subnet1/inbound: 
-  vnet1/router: vnet1
-  vnet1/inbound: 
+  vnet2/router: vnet2
+  vnet2/inbound: 
   loadBalancer2: 
   vm2:  (endpoint)
   nic2/inbound: 
@@ -26,8 +26,8 @@ Nodes:
   nic3/inbound: 
   nic3/outbound: 
   subnet2/inbound: 
-  vnet2/router: vnet2
-  vnet2/inbound: 
+  vnet1/router: vnet1
+  vnet1/inbound: 
   AzureBackbone/inbound: 
 
 Nodes reachable from Internet:
@@ -77,7 +77,7 @@ vm1:
     protocol: TCP
 
   paths:
-    Internet => publicIp2/inbound => loadBalancer1 => vnet1/inbound => subnet1/inbound => nic1/inbound => vm1
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound => subnet1/inbound => nic1/inbound => vm1
       destination ip: 52.151.49.75
       destination port: http
       protocol: TCP
@@ -89,7 +89,7 @@ nic1/inbound:
     protocol: TCP
 
   paths:
-    Internet => publicIp2/inbound => loadBalancer1 => vnet1/inbound => subnet1/inbound => nic1/inbound
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound => subnet1/inbound => nic1/inbound
       destination ip: 52.151.49.75
       destination port: http
       protocol: TCP
@@ -108,26 +108,26 @@ subnet1/inbound:
     protocol: TCP
 
   paths:
-    Internet => publicIp2/inbound => loadBalancer1 => vnet1/inbound => subnet1/inbound
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound => subnet1/inbound
       destination ip: 52.151.49.75
       destination port: http
       protocol: TCP
 
-vnet1/router:
+vnet2/router:
   routes:
     (no routes)
 
   paths:
     (no paths)
 
-vnet1/inbound:
+vnet2/inbound:
   routes:
     destination ip: 192.168.20.4
     destination port: http
     protocol: TCP
 
   paths:
-    Internet => publicIp2/inbound => loadBalancer1 => vnet1/inbound
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound
       destination ip: 52.151.49.75
       destination port: http
       protocol: TCP
@@ -165,7 +165,7 @@ vm3:
     destination ip: 192.168.10.7
 
   paths:
-    Internet => publicIp1/inbound => AzureBackbone/inbound => vnet2/router => vnet2/inbound => subnet2/inbound => nic3/inbound => vm3
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic3/inbound => vm3
       destination ip: 20.80.145.57
 
 nic3/inbound:
@@ -173,7 +173,7 @@ nic3/inbound:
     destination ip: 192.168.10.7
 
   paths:
-    Internet => publicIp1/inbound => AzureBackbone/inbound => vnet2/router => vnet2/inbound => subnet2/inbound => nic3/inbound
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic3/inbound
       destination ip: 20.80.145.57
 
 nic3/outbound:
@@ -188,30 +188,29 @@ subnet2/inbound:
     destination ip: 192.168.10.7
 
   paths:
-    Internet => publicIp1/inbound => AzureBackbone/inbound => vnet2/router => vnet2/inbound => subnet2/inbound
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound => subnet2/inbound
       destination ip: 20.80.145.57
 
-vnet2/router:
+vnet1/router:
   routes:
     destination ip: 192.168.10.7
 
   paths:
-    Internet => publicIp1/inbound => AzureBackbone/inbound => vnet2/router
+    Internet => publicIp1/inbound => vnet1/router
       destination ip: 20.80.145.57
 
-vnet2/inbound:
+vnet1/inbound:
   routes:
     destination ip: 192.168.10.7
 
   paths:
-    Internet => publicIp1/inbound => AzureBackbone/inbound => vnet2/router => vnet2/inbound
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound
       destination ip: 20.80.145.57
 
 AzureBackbone/inbound:
   routes:
-    destination ip: 192.168.10.7
+    (no routes)
 
   paths:
-    Internet => publicIp1/inbound => AzureBackbone/inbound
-      destination ip: 20.80.145.57
+    (no paths)
 

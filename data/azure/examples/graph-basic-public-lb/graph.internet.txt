@@ -130,7 +130,7 @@ vm2:
     destination ip: 192.168.200.4
 
   paths:
-    Internet => publicIp3/inbound => AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic2/inbound => vm2
+    Internet => publicIp3/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic2/inbound => vm2
       source ip: AzureLoadBalancer
       destination ip: 20.190.43.112
       destination port: ssh
@@ -166,7 +166,7 @@ nic2/inbound:
     destination ip: 192.168.200.4
 
   paths:
-    Internet => publicIp3/inbound => AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic2/inbound
+    Internet => publicIp3/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic2/inbound
       destination ip: 20.190.43.112
       destination port: ssh
       protocol: TCP
@@ -194,7 +194,7 @@ subnet2/inbound:
       destination ip: 52.143.80.173
       destination port: http
       protocol: TCP
-    Internet => publicIp3/inbound => AzureBackbone/inbound => vnet1/router => vnet1/inbound => subnet2/inbound
+    Internet => publicIp3/inbound => vnet1/router => vnet1/inbound => subnet2/inbound
       destination ip: 20.190.43.112
 
 subnet2/outbound:
@@ -237,7 +237,7 @@ vnet1/router:
     destination ip: 192.168.200.4
 
   paths:
-    Internet => publicIp3/inbound => AzureBackbone/inbound => vnet1/router
+    Internet => publicIp3/inbound => vnet1/router
       destination ip: 20.190.43.112
 
 vnet1/inbound:
@@ -253,14 +253,13 @@ vnet1/inbound:
       destination ip: 52.143.80.173
       destination port: http
       protocol: TCP
-    Internet => publicIp3/inbound => AzureBackbone/inbound => vnet1/router => vnet1/inbound
+    Internet => publicIp3/inbound => vnet1/router => vnet1/inbound
       destination ip: 20.190.43.112
 
 AzureBackbone/inbound:
   routes:
-    destination ip: 192.168.200.4
+    (no routes)
 
   paths:
-    Internet => publicIp3/inbound => AzureBackbone/inbound
-      destination ip: 20.190.43.112
+    (no paths)
 

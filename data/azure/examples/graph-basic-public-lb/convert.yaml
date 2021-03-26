@@ -6,7 +6,7 @@ nodes:
       - destination: loadBalancer1
   - key: publicIp3/inbound
     routes:
-      - destination: AzureBackbone/inbound
+      - destination: vnet1/router
         override:
           destinationIp: 192.168.200.4
   - key: publicIp3/outbound
