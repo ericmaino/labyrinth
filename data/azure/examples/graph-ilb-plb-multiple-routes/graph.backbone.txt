@@ -6,19 +6,17 @@ Options summary:
 Backprojecting paths past NAT rewrites. (-b)
 
 Nodes:
-  frontend1: 
   publicIp1/inbound: 
   Internet:  (endpoint)
   AzureBackbone/outbound: 
+  loadBalancer1: 
   vm1:  (endpoint)
   nic1/inbound: 
   nic1/outbound: 
   subnet1/inbound: 
   vnet1/router: vnet1
   vnet1/inbound: 
-  frontend2: 
-  frontend3: 
-  loadBalancer1: 
+  loadBalancer2: 
   vm2:  (endpoint)
   nic2/inbound: 
   nic2/outbound: 
@@ -28,13 +26,6 @@ Nodes:
   AzureBackbone/inbound: 
 
 Nodes reachable from AzureBackbone/inbound:
-
-frontend1:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
 
 publicIp1/inbound:
   routes:
@@ -51,6 +42,13 @@ Internet:
     (no paths)
 
 AzureBackbone/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+loadBalancer1:
   routes:
     (no routes)
 
@@ -104,41 +102,30 @@ vnet1/inbound:
     AzureBackbone/inbound => vnet1/router => vnet1/inbound
       destination ip: vnet1
 
-frontend2:
+loadBalancer2:
   routes:
     destination ip: 192.168.10.5-192.168.10.6
 
   paths:
-    AzureBackbone/inbound => vnet2/router => loadBalancer1 => frontend2
-      destination ip: 192.168.10.5-192.168.10.6
-
-frontend3:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
-loadBalancer1:
-  routes:
-    destination ip: 192.168.10.5-192.168.10.6
-
-  paths:
-    AzureBackbone/inbound => vnet2/router => loadBalancer1
+    AzureBackbone/inbound => vnet2/router => loadBalancer2
       destination ip: 192.168.10.5-192.168.10.6
 
 vm2:
   routes:
     destination ip: 192.168.10.4
-    destination port: http
+    destination port: http-81
     protocol: TCP
 
     destination ip: 192.168.10.4
 
   paths:
-    AzureBackbone/inbound => vnet2/router => loadBalancer1 => frontend2 => vnet2/inbound => subnet2/inbound => nic2/inbound => vm2
-      destination ip: 192.168.10.5-192.168.10.6
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound => subnet2/inbound => nic2/inbound => vm2
+      destination ip: 192.168.10.5
       destination port: http
+      protocol: TCP
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound => subnet2/inbound => nic2/inbound => vm2
+      destination ip: 192.168.10.6
+      destination port: 8080
       protocol: TCP
     AzureBackbone/inbound => vnet2/router => vnet2/inbound => subnet2/inbound => nic2/inbound => vm2
       destination ip: 192.168.10.4
@@ -146,15 +133,19 @@ vm2:
 nic2/inbound:
   routes:
     destination ip: 192.168.10.4
-    destination port: http
+    destination port: http-81
     protocol: TCP
 
     destination ip: 192.168.10.4
 
   paths:
-    AzureBackbone/inbound => vnet2/router => loadBalancer1 => frontend2 => vnet2/inbound => subnet2/inbound => nic2/inbound
-      destination ip: 192.168.10.5-192.168.10.6
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound => subnet2/inbound => nic2/inbound
+      destination ip: 192.168.10.5
       destination port: http
+      protocol: TCP
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound => subnet2/inbound => nic2/inbound
+      destination ip: 192.168.10.6
+      destination port: 8080
       protocol: TCP
     AzureBackbone/inbound => vnet2/router => vnet2/inbound => subnet2/inbound => nic2/inbound
       destination ip: 192.168.10.4
@@ -169,15 +160,19 @@ nic2/outbound:
 subnet2/inbound:
   routes:
     destination ip: 192.168.10.4
-    destination port: http
+    destination port: http-81
     protocol: TCP
 
     destination ip: 192.168.10.0-192.168.10.4, 192.168.10.7-192.168.10.15
 
   paths:
-    AzureBackbone/inbound => vnet2/router => loadBalancer1 => frontend2 => vnet2/inbound => subnet2/inbound
-      destination ip: 192.168.10.5-192.168.10.6
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound => subnet2/inbound
+      destination ip: 192.168.10.5
       destination port: http
+      protocol: TCP
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound => subnet2/inbound
+      destination ip: 192.168.10.6
+      destination port: 8080
       protocol: TCP
     AzureBackbone/inbound => vnet2/router => vnet2/inbound => subnet2/inbound
       destination ip: 192.168.10.0-192.168.10.4, 192.168.10.7-192.168.10.15
@@ -193,15 +188,19 @@ vnet2/router:
 vnet2/inbound:
   routes:
     destination ip: 192.168.10.4
-    destination port: http
+    destination port: http-81
     protocol: TCP
 
     destination ip: 192.168.10.0-192.168.10.4, 192.168.10.7-192.168.10.255
 
   paths:
-    AzureBackbone/inbound => vnet2/router => loadBalancer1 => frontend2 => vnet2/inbound
-      destination ip: 192.168.10.5-192.168.10.6
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound
+      destination ip: 192.168.10.5
       destination port: http
+      protocol: TCP
+    AzureBackbone/inbound => vnet2/router => loadBalancer2 => vnet2/inbound
+      destination ip: 192.168.10.6
+      destination port: 8080
       protocol: TCP
     AzureBackbone/inbound => vnet2/router => vnet2/inbound
       destination ip: 192.168.10.0-192.168.10.4, 192.168.10.7-192.168.10.255

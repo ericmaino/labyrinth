@@ -11,9 +11,7 @@ Unsupported or ignored Azure resource graph types:
   2: microsoft.network/firewallpolicies
         /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/firewallpolicies/firewall policy
         /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/firewallpolicies/firewall-policy
-  3: microsoft.network/loadbalancers
-        /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.network/loadbalancers/vmss02-lb
-  4: microsoft.network/localnetworkgateways
+  3: microsoft.network/localnetworkgateways
         /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/localnetworkgateways/unifi-gateway
-  5: microsoft.network/virtualnetworkgateways
+  4: microsoft.network/virtualnetworkgateways
         /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworkgateways/vnet-vpn-gateway

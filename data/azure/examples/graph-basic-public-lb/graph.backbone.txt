@@ -7,12 +7,12 @@ Backprojecting paths past NAT rewrites. (-b)
 
 Nodes:
   publicIp1/inbound: 
-  frontend1: 
   publicIp2/inbound: 
   publicIp3/inbound: 
   publicIp3/outbound: 
   Internet:  (endpoint)
   AzureBackbone/outbound: 
+  loadBalancer1: 
   subnet1/inbound: 
   vm1:  (endpoint)
   nic1/inbound: 
@@ -33,13 +33,6 @@ Nodes:
 Nodes reachable from AzureBackbone/inbound:
 
 publicIp1/inbound:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
-frontend1:
   routes:
     (no routes)
 
@@ -75,6 +68,13 @@ Internet:
     (no paths)
 
 AzureBackbone/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+loadBalancer1:
   routes:
     (no routes)
 

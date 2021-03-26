@@ -1,15 +1,7 @@
 nodes:
-  - key: frontend1
-    routes:
-      - destination: AzureBackbone/inbound
-        constraints:
-          destinationPort: '80'
-          protocol: Tcp
-        override:
-          destinationIp: 192.168.20.4
   - key: publicIp1/inbound
     routes:
-      - destination: frontend1
+      - destination: loadBalancer1
   - key: Internet
     endpoint: true
     routes:
@@ -18,6 +10,15 @@ nodes:
           destinationIp: 52.151.49.75
   - key: AzureBackbone/outbound
     routes: []
+  - key: loadBalancer1
+    routes:
+      - destination: vnet1/inbound
+        constraints:
+          destinationIp: 52.151.49.75
+          destinationPort: '80'
+          protocol: Tcp
+        override:
+          destinationIp: 192.168.20.4
   - key: vm1
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.compute/virtualmachines/vm-a-01
@@ -60,27 +61,23 @@ nodes:
       - destination: subnet1/inbound
         constraints:
           destinationIp: 192.168.20.0/28
-  - key: frontend2
+  - key: loadBalancer2
     routes:
       - destination: vnet2/inbound
         constraints:
+          destinationIp: 192.168.10.5
           destinationPort: '80'
           protocol: Tcp
         override:
           destinationIp: 192.168.10.4
-  - key: frontend3
-    routes:
       - destination: vnet2/inbound
         constraints:
+          destinationIp: 192.168.10.6
           destinationPort: '8080'
           protocol: Tcp
         override:
           destinationIp: 192.168.10.4
           destinationPort: '81'
-  - key: loadBalancer1
-    routes:
-      - destination: frontend2
-      - destination: frontend3
   - key: vm2
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.compute/virtualmachines/vm-b-01
@@ -115,7 +112,7 @@ nodes:
       - destination: AzureBackbone/outbound
         constraints:
           destinationIp: except 192.168.10.0/24
-      - destination: loadBalancer1
+      - destination: loadBalancer2
         constraints:
           destinationIp: '192.168.10.5,192.168.10.6'
       - destination: vnet2/inbound

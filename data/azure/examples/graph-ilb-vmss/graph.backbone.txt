@@ -6,14 +6,12 @@ Options summary:
 Backprojecting paths past NAT rewrites. (-b)
 
 Nodes:
-  frontend1: 
   publicIp1/inbound: 
   publicIp2/inbound: 
-  frontend2: 
   publicIp3/inbound: 
   Internet:  (endpoint)
   AzureBackbone/outbound: 
-  frontend3: 
+  loadBalancer2: 
   loadBalancer1: 
   subnet1/inbound: 
   vm1:  (endpoint)
@@ -40,13 +38,6 @@ Nodes:
 
 Nodes reachable from AzureBackbone/inbound:
 
-frontend1:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
 publicIp1/inbound:
   routes:
     (no routes)
@@ -55,13 +46,6 @@ publicIp1/inbound:
     (no paths)
 
 publicIp2/inbound:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
-frontend2:
   routes:
     (no routes)
 
@@ -89,21 +73,20 @@ AzureBackbone/outbound:
   paths:
     (no paths)
 
-frontend3:
+loadBalancer2:
   routes:
     destination ip: 192.168.200.5
 
   paths:
-    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend3
+    AzureBackbone/inbound => vnet1/router => loadBalancer2
       destination ip: 192.168.200.5
 
 loadBalancer1:
   routes:
-    destination ip: 192.168.200.5
+    (no routes)
 
   paths:
-    AzureBackbone/inbound => vnet1/router => loadBalancer1
-      destination ip: 192.168.200.5
+    (no paths)
 
 subnet1/inbound:
   routes:
@@ -284,7 +267,7 @@ subnet3/inbound:
     destination ip: 192.168.202.0/28
 
   paths:
-    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend3 => vnet1/inbound => subnet3/inbound
+    AzureBackbone/inbound => vnet1/router => loadBalancer2 => vnet1/inbound => subnet3/inbound
       destination ip: 192.168.200.5
       destination port: 3000
       protocol: TCP
@@ -354,7 +337,7 @@ vnet1/inbound:
     destination ip: 192.168.200.0-192.168.200.4, 192.168.200.6-192.168.202.31, 192.168.202.64/26
 
   paths:
-    AzureBackbone/inbound => vnet1/router => loadBalancer1 => frontend3 => vnet1/inbound
+    AzureBackbone/inbound => vnet1/router => loadBalancer2 => vnet1/inbound
       destination ip: 192.168.200.5
       destination port: 3000
       protocol: TCP

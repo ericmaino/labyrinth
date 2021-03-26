@@ -1,22 +1,12 @@
 nodes:
-  - key: frontend1
-    routes: []
   - key: publicIp1/inbound
     routes:
-      - destination: frontend1
+      - destination: loadBalancer1
   - key: publicIp2/inbound
     routes: []
-  - key: frontend2
-    routes:
-      - destination: AzureBackbone/inbound
-        constraints:
-          destinationPort: '80'
-          protocol: Tcp
-        override:
-          destinationIp: '192.168.200.5,192.168.200.4'
   - key: publicIp3/inbound
     routes:
-      - destination: frontend2
+      - destination: loadBalancer1
   - key: Internet
     endpoint: true
     routes:
@@ -31,6 +21,15 @@ nodes:
           destinationIp: 52.143.80.173
   - key: AzureBackbone/outbound
     routes: []
+  - key: loadBalancer1
+    routes:
+      - destination: vnet1/inbound
+        constraints:
+          destinationIp: 52.143.80.173
+          destinationPort: '80'
+          protocol: Tcp
+        override:
+          destinationIp: '192.168.200.5,192.168.200.4'
   - key: subnet1/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet/subnets/gatewaysubnet/inbound

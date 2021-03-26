@@ -19,18 +19,16 @@ nodes:
           destinationIp: 52.143.80.173
   - key: AzureBackbone/outbound
     routes: []
-  - key: frontend1
+  - key: loadBalancer1
     routes:
       - destination: vnet1/inbound
         constraints:
+          destinationIp: 192.168.200.5
           destinationPort: '3000'
           protocol: Tcp
         override:
           destinationIp: '192.168.200.4,192.168.202.20'
           destinationPort: '22'
-  - key: loadBalancer1
-    routes:
-      - destination: frontend1
   - key: subnet1/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet/subnets/gatewaysubnet/inbound

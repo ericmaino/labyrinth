@@ -11,7 +11,6 @@ Nodes:
   publicIp3/inbound: 
   Internet:  (endpoint)
   AzureBackbone/outbound: 
-  frontend1: 
   loadBalancer1: 
   subnet1/inbound: 
   vm1:  (endpoint)
@@ -57,13 +56,6 @@ publicIp3/inbound:
       destination ip: 52.143.80.173
 
 AzureBackbone/outbound:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
-frontend1:
   routes:
     (no routes)
 
