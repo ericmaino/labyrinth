@@ -1,0 +1,414 @@
+Options summary:
+  Not modeling source ip address spoofing (use -s flag to enable).
+  Displaying endpoints and routing nodes. (-r)
+  Displaying paths (-p or -v).
+  Verbose mode (-v).
+Backprojecting paths past NAT rewrites. (-b)
+
+Nodes:
+  AzureBackbone/outbound: 
+  Internet:  (endpoint)
+  loadBalancer1: 
+  loadBalancer2: 
+  nic1/inbound: 
+  nic1/outbound: 
+  nic2/inbound: 
+  nic2/outbound: 
+  nic3/inbound: 
+  nic3/outbound: 
+  nic4/inbound: 
+  nic4/outbound: 
+  nic5/inbound: 
+  nic5/outbound: 
+  nic6/inbound: 
+  nic6/outbound: 
+  publicIp1/inbound: 
+  publicIp1/outbound: 
+  publicIp2/inbound: 
+  subnet1/inbound: 
+  subnet2/inbound: 
+  subnet3/inbound: 
+  UnboundRule: 
+  vm1/inbound:  (endpoint)
+  vm1/outbound:  (endpoint)
+  vm2/inbound:  (endpoint)
+  vm2/outbound:  (endpoint)
+  vm3/inbound:  (endpoint)
+  vm3/outbound:  (endpoint)
+  vm4/inbound:  (endpoint)
+  vm4/outbound:  (endpoint)
+  vm5/inbound:  (endpoint)
+  vm5/outbound:  (endpoint)
+  vm6/inbound:  (endpoint)
+  vm6/outbound:  (endpoint)
+  vnet1/inbound: 
+  vnet1/outbound: 
+  vnet1/router: vnet1
+
+Nodes reachable from Internet:
+
+AzureBackbone/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+loadBalancer1:
+  routes:
+    destination ip: 52.247.250.222
+
+  paths:
+    Internet => publicIp2 => loadBalancer1
+      destination ip: 52.247.250.222
+
+loadBalancer2:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic1/inbound:
+  routes:
+    destination ip: 172.16.0.4
+
+  paths:
+    Internet => publicIp1 => vnet1 => subnet1 => nic1
+      destination ip: 52.250.65.117
+
+nic1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/inbound:
+  routes:
+    destination ip: 172.16.0.5
+    destination port: 3389, 8000
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet1 => nic2
+      destination ip: 52.247.250.222
+      destination port: 800
+      protocol: TCP
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet1 => nic2
+      destination ip: 52.247.250.222
+      destination port: 3389
+      protocol: TCP
+
+nic2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic3/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic3/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic4/inbound:
+  routes:
+    destination ip: 172.16.0.33
+    destination port: 2342
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet3 => nic4
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+
+nic4/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic5/inbound:
+  routes:
+    destination ip: 172.16.0.34
+    destination port: 2342
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet3 => nic5
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+
+nic5/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic6/inbound:
+  routes:
+    destination ip: 172.16.0.35
+    destination port: 2342
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet3 => nic6
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+
+nic6/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp1/inbound:
+  routes:
+    destination ip: 52.250.65.117
+
+  paths:
+    Internet => publicIp1
+      destination ip: 52.250.65.117
+
+publicIp1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp2/inbound:
+  routes:
+    destination ip: 52.247.250.222
+
+  paths:
+    Internet => publicIp2
+      destination ip: 52.247.250.222
+
+subnet1/inbound:
+  routes:
+    destination ip: 172.16.0.4
+
+    destination ip: 172.16.0.5
+    destination port: 3389, 8000
+    protocol: TCP
+
+  paths:
+    Internet => publicIp1 => vnet1 => subnet1
+      destination ip: 52.250.65.117
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet1
+      destination ip: 52.247.250.222
+      destination port: 800
+      protocol: TCP
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet1
+      destination ip: 52.247.250.222
+      destination port: 3389
+      protocol: TCP
+
+subnet2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet3/inbound:
+  routes:
+    destination ip: 172.16.0.33-172.16.0.35
+    destination port: 2342
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet3
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+
+UnboundRule:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm1/inbound:
+  routes:
+    destination ip: 172.16.0.4
+    destination port: https
+    protocol: TCP
+
+    source ip: AzureLoadBalancer, vnet1
+    destination ip: 172.16.0.4
+
+  paths:
+    Internet => publicIp1 => vnet1 => subnet1 => nic1 => vm1
+      source ip: AzureLoadBalancer
+      destination ip: 52.250.65.117
+
+      source ip: vnet1
+      destination ip: 52.250.65.117
+
+      destination ip: 52.250.65.117
+      destination port: https
+      protocol: TCP
+
+vm1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2/inbound:
+  routes:
+    destination ip: 172.16.0.5
+    destination port: 3389, 8000
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet1 => nic2 => vm2
+      destination ip: 52.247.250.222
+      destination port: 800
+      protocol: TCP
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet1 => nic2 => vm2
+      destination ip: 52.247.250.222
+      destination port: 3389
+      protocol: TCP
+
+vm2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm3/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm3/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm4/inbound:
+  routes:
+    destination ip: 172.16.0.33
+    destination port: 2342
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet3 => nic4 => vm4
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+
+vm4/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm5/inbound:
+  routes:
+    destination ip: 172.16.0.34
+    destination port: 2342
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet3 => nic5 => vm5
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+
+vm5/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm6/inbound:
+  routes:
+    destination ip: 172.16.0.35
+    destination port: 2342
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2 => loadBalancer1 => vnet1 => subnet3 => nic6 => vm6
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+
+vm6/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet1/inbound:
+  routes:
+    destination ip: 172.16.0.4
+
+    destination ip: 172.16.0.33-172.16.0.35
+    destination port: 2342
+    protocol: TCP
+
+    destination ip: 172.16.0.5
+    destination port: 3389, 8000
+    protocol: TCP
+
+  paths:
+    Internet => publicIp1 => vnet1
+      destination ip: 52.250.65.117
+    Internet => publicIp2 => loadBalancer1 => vnet1
+      destination ip: 52.247.250.222
+      destination port: 800
+      protocol: TCP
+    Internet => publicIp2 => loadBalancer1 => vnet1
+      destination ip: 52.247.250.222
+      destination port: 3242
+      protocol: TCP
+    Internet => publicIp2 => loadBalancer1 => vnet1
+      destination ip: 52.247.250.222
+      destination port: 3389
+      protocol: TCP
+
+vnet1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet1/router:
+  routes:
+    destination ip: 172.16.0.4
+
+  paths:
+    Internet => publicIp1 => vnet1
+      destination ip: 52.250.65.117
+

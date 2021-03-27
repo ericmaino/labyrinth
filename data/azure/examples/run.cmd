@@ -16,7 +16,7 @@ GOTO :EOF
 GOTO :EOF
 
 :WITHNAME
-    CALL :PROCESS %1 %~n1
+    CALL :PROCESS %1 %~nx1
 GOTO :EOF
 
 :PROCESS
@@ -29,7 +29,11 @@ GOTO :EOF
     ECHO Processing - %_NAME%
     node %_ROOT%/build/src/apps/convert.js %GRAPH% %YAML% > %TXT_CONVERT%
     node %_ROOT%/build/src/apps/graph.js %YAML% -f Internet -r -b -v > %TXT_GRAPH%.from.internet.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm1/outbound -r -b -v > %TXT_GRAPH%.from.vm1.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm2/outbound -r -b -v > %TXT_GRAPH%.from.vm2.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm3/outbound -r -b -v > %TXT_GRAPH%.from.vm3.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm1/inbound -r -b -v > %TXT_GRAPH%.to.vm1.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm2/inbound -r -b -v > %TXT_GRAPH%.to.vm2.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm3/inbound -r -b -v > %TXT_GRAPH%.to.vm3.txt
     node %_ROOT%/build/src/apps/graph.js %YAML% -t Internet -r -b -v > %TXT_GRAPH%.to.internet.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm1 -r -b -v > %TXT_GRAPH%.to.vm1.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm1 -r -b -v > %TXT_GRAPH%.from.vm1.txt
 GOTO  :EOF
