@@ -6,54 +6,41 @@ Options summary:
 Backprojecting paths past NAT rewrites. (-b)
 
 Nodes:
-  publicIp1/inbound: 
-  publicIp2/inbound: 
-  publicIp3/inbound: 
-  Internet:  (endpoint)
+  AzureBackbone/inbound: 
   AzureBackbone/outbound: 
+  Internet:  (endpoint)
   loadBalancer1: 
-  subnet1/inbound: 
-  vm1:  (endpoint)
+  loadBalancer2: 
   nic1/inbound: 
   nic1/outbound: 
+  nic2/inbound: 
+  nic2/outbound: 
+  nic3/inbound: 
+  nic3/outbound: 
+  nic4/inbound: 
+  nic4/outbound: 
+  subnet1/inbound: 
   subnet2/inbound: 
   subnet2/outbound: 
   subnet3/inbound: 
   subnet3/outbound: 
-  vm2:  (endpoint)
-  nic2/inbound: 
-  nic2/outbound: 
   subnet4/inbound: 
   subnet5/inbound: 
-  vnet1/router: vnet1
+  vm1:  (endpoint)
+  vm2:  (endpoint)
+  vm3:  (endpoint)
+  vm4:  (endpoint)
   vnet1/inbound: 
-  AzureBackbone/inbound: 
+  vnet1/router: vnet1
 
 Nodes reachable from Internet:
 
-publicIp1/inbound:
+AzureBackbone/inbound:
   routes:
-    destination ip: 20.47.120.40
+    (no routes)
 
   paths:
-    Internet => publicIp1/inbound
-      destination ip: 20.47.120.40
-
-publicIp2/inbound:
-  routes:
-    destination ip: 52.143.80.249
-
-  paths:
-    Internet => publicIp2/inbound
-      destination ip: 52.143.80.249
-
-publicIp3/inbound:
-  routes:
-    destination ip: 52.143.80.173
-
-  paths:
-    Internet => publicIp3/inbound
-      destination ip: 52.143.80.173
+    (no paths)
 
 AzureBackbone/outbound:
   routes:
@@ -69,14 +56,7 @@ loadBalancer1:
   paths:
     (no paths)
 
-subnet1/inbound:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
-vm1:
+loadBalancer2:
   routes:
     (no routes)
 
@@ -91,6 +71,55 @@ nic1/inbound:
     (no paths)
 
 nic1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic3/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic3/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic4/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic4/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet1/inbound:
   routes:
     (no routes)
 
@@ -125,27 +154,6 @@ subnet3/outbound:
   paths:
     (no paths)
 
-vm2:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
-nic2/inbound:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
-nic2/outbound:
-  routes:
-    (no routes)
-
-  paths:
-    (no paths)
-
 subnet4/inbound:
   routes:
     (no routes)
@@ -160,7 +168,28 @@ subnet5/inbound:
   paths:
     (no paths)
 
-vnet1/router:
+vm1:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm3:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm4:
   routes:
     (no routes)
 
@@ -174,7 +203,7 @@ vnet1/inbound:
   paths:
     (no paths)
 
-AzureBackbone/inbound:
+vnet1/router:
   routes:
     (no routes)
 

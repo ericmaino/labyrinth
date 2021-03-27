@@ -1,0 +1,280 @@
+Options summary:
+  Not modeling source ip address spoofing (use -s flag to enable).
+  Displaying endpoints and routing nodes. (-r)
+  Displaying paths (-p or -v).
+  Verbose mode (-v).
+Backprojecting paths past NAT rewrites. (-b)
+
+Nodes:
+  AzureBackbone/inbound: 
+  AzureBackbone/outbound: 
+  Internet:  (endpoint)
+  loadBalancer1: 
+  nic1/inbound: 
+  nic1/outbound: 
+  nic2/inbound: 
+  nic2/outbound: 
+  publicIp1/inbound: 
+  publicIp1/outbound: 
+  subnet1/inbound: 
+  subnet2/inbound: 
+  subnet2/outbound: 
+  subnet3/inbound: 
+  subnet3/outbound: 
+  subnet4/inbound: 
+  subnet5/inbound: 
+  vm1:  (endpoint)
+  vm2:  (endpoint)
+  vnet1/inbound: 
+  vnet1/router: vnet1
+
+Nodes reachable from vm1:
+
+AzureBackbone/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+AzureBackbone/outbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: except 52.143.80.173, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => AzureBackbone/outbound
+      source ip: 192.168.200.5
+      destination ip: except 52.143.80.173, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+
+Internet:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: except 52.143.80.173, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => AzureBackbone/outbound => Internet
+      source ip: 192.168.200.5
+      destination ip: except 52.143.80.173, 192.168.200.0-192.168.202.31, 192.168.202.64/26
+
+loadBalancer1:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 52.143.80.173
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => loadBalancer1
+      source ip: 192.168.200.5
+      destination ip: 52.143.80.173
+
+nic1/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.5
+
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.5
+    destination port: ssh, http
+    protocol: TCP
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => loadBalancer1 => vnet1/inbound => subnet2/inbound => nic1/inbound
+      source ip: 192.168.200.5
+      destination ip: 52.143.80.173
+      destination port: http
+      protocol: TCP
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic1/inbound
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.5
+      destination port: ssh
+      protocol: TCP
+
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.5
+
+nic1/outbound:
+  routes:
+    source ip: 192.168.200.5
+
+  paths:
+    vm1 => nic1/outbound
+      source ip: 192.168.200.5
+
+nic2/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.4
+    destination port: ssh
+    protocol: TCP
+
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.4
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic2/inbound
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.4
+
+nic2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet1/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.201.0/24
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet1/inbound
+      source ip: 192.168.200.5
+      destination ip: 192.168.201.0/24
+
+subnet2/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.5
+    destination port: http
+    protocol: TCP
+
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.0/24
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => loadBalancer1 => vnet1/inbound => subnet2/inbound
+      source ip: 192.168.200.5
+      destination ip: 52.143.80.173
+      destination port: http
+      protocol: TCP
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet2/inbound
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.0/24
+
+subnet2/outbound:
+  routes:
+    source ip: 192.168.200.5
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound
+      source ip: 192.168.200.5
+
+subnet3/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.202.0/28
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet3/inbound
+      source ip: 192.168.200.5
+      destination ip: 192.168.202.0/28
+
+subnet3/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet4/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.202.16/28
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet4/inbound
+      source ip: 192.168.200.5
+      destination ip: 192.168.202.16/28
+
+subnet5/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.202.64/26
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet5/inbound
+      source ip: 192.168.200.5
+      destination ip: 192.168.202.64/26
+
+vm2:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.4
+
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.4
+    destination port: ssh
+    protocol: TCP
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic2/inbound => vm2
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.4
+
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+      source ip: 192.168.200.5
+      destination ip: 192.168.200.4
+      destination port: ssh
+      protocol: TCP
+
+vnet1/inbound:
+  routes:
+    source ip: 192.168.200.5
+    destination ip: 192.168.200.5
+    destination port: http
+    protocol: TCP
+
+    source ip: 192.168.200.5
+    destination ip: vnet1
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => loadBalancer1 => vnet1/inbound
+      source ip: 192.168.200.5
+      destination ip: 52.143.80.173
+      destination port: http
+      protocol: TCP
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router => vnet1/inbound
+      source ip: 192.168.200.5
+      destination ip: vnet1
+
+vnet1/router:
+  routes:
+    source ip: 192.168.200.5
+
+  paths:
+    vm1 => nic1/outbound => subnet2/outbound => vnet1/router
+      source ip: 192.168.200.5
+      destination ip: Internet
+
+      source ip: 192.168.200.5
+      destination ip: vnet1
+

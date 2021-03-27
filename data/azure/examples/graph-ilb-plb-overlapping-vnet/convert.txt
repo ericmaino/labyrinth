@@ -1,4 +1,6 @@
 Azure resource graph input file: D:\src\Hopcroft\labyrinth\data\azure\examples\graph-ilb-plb-overlapping-vnet\resource-graph.json
 Labyrinth graph output file: D:\src\Hopcroft\labyrinth\data\azure\examples\graph-ilb-plb-overlapping-vnet\convert.yaml
 Conversion complete.
-All Azure resource graph types understood.
+Unsupported or ignored Azure resource graph types:
+  0: microsoft.network/publicipaddresses
+        /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/publicipaddresses/public-lb-ip

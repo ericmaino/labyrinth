@@ -1,36 +1,15 @@
 nodes:
-  - key: publicIp1/inbound
+  - key: AzureBackbone/inbound
     routes: []
-  - key: publicIp2/inbound
-    routes:
-      - destination: loadBalancer1
-  - key: publicIp3/inbound
-    routes:
-      - destination: vnet1/router
-        override:
-          destinationIp: 192.168.200.4
-  - key: publicIp3/outbound
+  - key: AzureBackbone/outbound
     routes:
       - destination: Internet
-        override:
-          sourceIp: 20.190.43.112
   - key: Internet
     endpoint: true
     routes:
       - destination: publicIp1/inbound
         constraints:
-          destinationIp: 52.143.80.249
-      - destination: publicIp2/inbound
-        constraints:
-          destinationIp: 52.143.80.173
-      - destination: publicIp3/inbound
-        constraints:
           destinationIp: 20.190.43.112
-  - key: AzureBackbone/outbound
-    routes:
-      - destination: publicIp3/outbound
-        constraints:
-          sourceIp: 192.168.200.4
   - key: loadBalancer1
     routes:
       - destination: vnet1/inbound
@@ -40,18 +19,6 @@ nodes:
           protocol: Tcp
         override:
           destinationIp: 192.168.200.5
-  - key: subnet1/inbound
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet/subnets/gatewaysubnet/inbound
-    routes: []
-  - key: vm1
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.compute/virtualmachines/vnet-test-01
-    endpoint: true
-    routes:
-      - destination: nic1/outbound
-        constraints:
-          sourceIp: 192.168.200.5
   - key: nic1/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.network/networkinterfaces/vnet-test-01167/inbound
@@ -62,14 +29,6 @@ nodes:
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.network/networkinterfaces/vnet-test-01167/outbound
     routes:
       - destination: subnet2/outbound
-  - key: vm2
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.compute/virtualmachines/vnet-test-02
-    endpoint: true
-    routes:
-      - destination: nic2/outbound
-        constraints:
-          sourceIp: 192.168.200.4
   - key: nic2/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.network/networkinterfaces/vnet-test-02598/inbound
@@ -162,6 +121,20 @@ nodes:
           destinationIp: '*'
           destinationPort: '*'
           protocol: TCP
+  - key: publicIp1/inbound
+    routes:
+      - destination: vnet1/router
+        override:
+          destinationIp: 192.168.200.4
+  - key: publicIp1/outbound
+    routes:
+      - destination: AzureBackbone/outbound
+        override:
+          sourceIp: 20.190.43.112
+  - key: subnet1/inbound
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet/subnets/gatewaysubnet/inbound
+    routes: []
   - key: subnet2/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet/subnets/openvpn-gateway/inbound
@@ -338,16 +311,22 @@ nodes:
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet/subnets/azurefirewallsubnet/inbound
     routes: []
-  - key: vnet1/router
+  - key: vm1
     name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet
-    range:
-      sourceIp: '192.168.200.0-192.168.202.31, 192.168.202.64/26'
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.compute/virtualmachines/vnet-test-01
+    endpoint: true
     routes:
-      - destination: AzureBackbone/outbound
+      - destination: nic1/outbound
         constraints:
-          destinationIp: 'except 192.168.200.0-192.168.202.31, 192.168.202.64/26'
-      - destination: vnet1/inbound
+          sourceIp: 192.168.200.5
+  - key: vm2
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.compute/virtualmachines/vnet-test-02
+    endpoint: true
+    routes:
+      - destination: nic2/outbound
+        constraints:
+          sourceIp: 192.168.200.4
   - key: vnet1/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet
@@ -367,21 +346,35 @@ nodes:
       - destination: subnet5/inbound
         constraints:
           destinationIp: 192.168.202.64/26
-  - key: AzureBackbone/inbound
+  - key: vnet1/router
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-test-vpn/providers/microsoft.network/virtualnetworks/x-test-vpn-vnet
+    range:
+      sourceIp: '192.168.200.0-192.168.202.31, 192.168.202.64/26'
     routes:
-      - destination: vnet1/router
+      - destination: publicIp1/outbound
         constraints:
-          destinationIp: '192.168.200.0-192.168.202.31, 192.168.202.64/26'
+          sourceIp: 192.168.200.4
+      - destination: loadBalancer1
+        constraints:
+          destinationIp: 52.143.80.173
+      - destination: AzureBackbone/outbound
+        constraints:
+          destinationIp: 'except 192.168.200.0-192.168.202.31, 192.168.202.64/26'
+      - destination: vnet1/inbound
 symbols:
   - dimension: ip
     symbol: AzureLoadBalancer
     range: 168.63.129.16
   - dimension: protocol
-    symbol: Tcp
-    range: tcp
-  - dimension: protocol
     symbol: Udp
     range: udp
+  - dimension: protocol
+    symbol: UDP
+    range: udp
+  - dimension: protocol
+    symbol: Tcp
+    range: tcp
   - dimension: protocol
     symbol: TCP
     range: tcp

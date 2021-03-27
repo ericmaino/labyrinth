@@ -1,14 +1,11 @@
 nodes:
-  - key: publicIp1/inbound
+  - key: AzureBackbone/inbound
+    routes: []
+  - key: AzureBackbone/outbound
     routes:
-      - destination: loadBalancer1
+      - destination: Internet
   - key: Internet
     endpoint: true
-    routes:
-      - destination: publicIp1/inbound
-        constraints:
-          destinationIp: 52.151.49.75
-  - key: AzureBackbone/outbound
     routes: []
   - key: loadBalancer1
     routes:
@@ -19,14 +16,15 @@ nodes:
           protocol: Tcp
         override:
           destinationIp: 192.168.10.4
-  - key: vm1
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.compute/virtualmachines/vm-a-01
-    endpoint: true
+  - key: loadBalancer2
     routes:
-      - destination: nic1/outbound
+      - destination: vnet2/inbound
         constraints:
-          sourceIp: 192.168.10.4
+          destinationIp: 192.168.10.5
+          destinationPort: '80'
+          protocol: Tcp
+        override:
+          destinationIp: 192.168.10.4
   - key: nic1/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/networkinterfaces/vm-a-01125/inbound
@@ -37,47 +35,6 @@ nodes:
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/networkinterfaces/vm-a-01125/outbound
     routes:
       - destination: vnet1/router
-  - key: subnet1/inbound
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a/subnets/subnet-a/inbound
-    routes:
-      - destination: nic1/inbound
-        constraints:
-          destinationIp: 192.168.10.4
-  - key: vnet1/router
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a
-    range:
-      sourceIp: 192.168.10.0/24
-    routes:
-      - destination: AzureBackbone/outbound
-        constraints:
-          destinationIp: except 192.168.10.0/24
-      - destination: vnet1/inbound
-  - key: vnet1/inbound
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a
-    routes:
-      - destination: subnet1/inbound
-        constraints:
-          destinationIp: 192.168.10.0/28
-  - key: loadBalancer2
-    routes:
-      - destination: vnet2/inbound
-        constraints:
-          destinationIp: 192.168.10.5
-          destinationPort: '80'
-          protocol: Tcp
-        override:
-          destinationIp: 192.168.10.4
-  - key: vm2
-    name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.compute/virtualmachines/vm-b-01
-    endpoint: true
-    routes:
-      - destination: nic2/outbound
-        constraints:
-          sourceIp: 192.168.10.4
   - key: nic2/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/networkinterfaces/vm-b-01466/inbound
@@ -88,6 +45,13 @@ nodes:
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/networkinterfaces/vm-b-01466/outbound
     routes:
       - destination: vnet2/router
+  - key: subnet1/inbound
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a/subnets/subnet-a/inbound
+    routes:
+      - destination: nic1/inbound
+        constraints:
+          destinationIp: 192.168.10.4
   - key: subnet2/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-b/subnets/subnet-b/inbound
@@ -95,19 +59,42 @@ nodes:
       - destination: nic2/inbound
         constraints:
           destinationIp: 192.168.10.4
-  - key: vnet2/router
+  - key: vm1
     name: >-
-      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-b
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.compute/virtualmachines/vm-a-01
+    endpoint: true
+    routes:
+      - destination: nic1/outbound
+        constraints:
+          sourceIp: 192.168.10.4
+  - key: vm2
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.compute/virtualmachines/vm-b-01
+    endpoint: true
+    routes:
+      - destination: nic2/outbound
+        constraints:
+          sourceIp: 192.168.10.4
+  - key: vnet1/inbound
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a
+    routes:
+      - destination: subnet1/inbound
+        constraints:
+          destinationIp: 192.168.10.0/28
+  - key: vnet1/router
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-a
     range:
       sourceIp: 192.168.10.0/24
     routes:
+      - destination: loadBalancer1
+        constraints:
+          destinationIp: 52.151.49.75
       - destination: AzureBackbone/outbound
         constraints:
           destinationIp: except 192.168.10.0/24
-      - destination: loadBalancer2
-        constraints:
-          destinationIp: 192.168.10.5
-      - destination: vnet2/inbound
+      - destination: vnet1/inbound
   - key: vnet2/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-b
@@ -115,24 +102,32 @@ nodes:
       - destination: subnet2/inbound
         constraints:
           destinationIp: 192.168.10.0/28
-  - key: AzureBackbone/inbound
+  - key: vnet2/router
+    name: >-
+      /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-bad-vnet/providers/microsoft.network/virtualnetworks/x-bad-vnet-b
+    range:
+      sourceIp: 192.168.10.0/24
     routes:
-      - destination: vnet1/router
+      - destination: loadBalancer2
         constraints:
-          destinationIp: 192.168.10.0/24
-      - destination: vnet2/router
+          destinationIp: 192.168.10.5
+      - destination: AzureBackbone/outbound
         constraints:
-          destinationIp: 192.168.10.0/24
+          destinationIp: except 192.168.10.0/24
+      - destination: vnet2/inbound
 symbols:
   - dimension: ip
     symbol: AzureLoadBalancer
     range: 168.63.129.16
   - dimension: protocol
-    symbol: Tcp
-    range: tcp
-  - dimension: protocol
     symbol: Udp
     range: udp
+  - dimension: protocol
+    symbol: UDP
+    range: udp
+  - dimension: protocol
+    symbol: Tcp
+    range: tcp
   - dimension: protocol
     symbol: TCP
     range: tcp

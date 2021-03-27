@@ -1,0 +1,184 @@
+Options summary:
+  Not modeling source ip address spoofing (use -s flag to enable).
+  Displaying endpoints and routing nodes. (-r)
+  Displaying paths (-p or -v).
+  Verbose mode (-v).
+Backprojecting paths past NAT rewrites. (-b)
+
+Nodes:
+  AzureBackbone/inbound: 
+  AzureBackbone/outbound: 
+  Internet:  (endpoint)
+  nic1/inbound: 
+  nic1/outbound: 
+  nic2/inbound: 
+  nic2/outbound: 
+  nic3/inbound: 
+  nic3/outbound: 
+  publicIp1/inbound: 
+  publicIp1/outbound: 
+  publicIp2/inbound: 
+  publicIp2/outbound: 
+  subnet1/inbound: 
+  subnet2/inbound: 
+  vm1:  (endpoint)
+  vm2:  (endpoint)
+  vm3:  (endpoint)
+  vnet1/inbound: 
+  vnet1/router: vnet1
+  vnet2/inbound: 
+  vnet2/router: vnet2
+
+Nodes reachable from vm1:
+
+AzureBackbone/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+AzureBackbone/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+Internet:
+  routes:
+    source ip: 20.47.120.58
+
+  paths:
+    vm1 => nic1/outbound => vnet1/router => publicIp1/outbound => Internet
+      source ip: 192.168.20.4
+
+nic1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic1/outbound:
+  routes:
+    source ip: 192.168.20.4
+
+  paths:
+    vm1 => nic1/outbound
+      source ip: 192.168.20.4
+
+nic2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic3/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic3/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp1/outbound:
+  routes:
+    source ip: 192.168.20.4
+
+  paths:
+    vm1 => nic1/outbound => vnet1/router => publicIp1/outbound
+      source ip: 192.168.20.4
+
+publicIp2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm3:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet1/router:
+  routes:
+    source ip: 192.168.20.4
+
+  paths:
+    vm1 => nic1/outbound => vnet1/router
+      source ip: 192.168.20.4
+
+vnet2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet2/router:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
