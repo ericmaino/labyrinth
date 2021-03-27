@@ -38,7 +38,7 @@ export function convertResourceGraph(services: GraphServices) {
     const {inbound, outbound} = services.convert.publicIp(
       services,
       ipSpec,
-      backboneInboundKey,
+      backboneOutboundKey,
       internetKey
     );
 

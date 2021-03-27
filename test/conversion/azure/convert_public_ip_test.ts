@@ -25,6 +25,9 @@ import {
   publicWithPrivateMissingAddress,
   loadBalancer1,
   loadBalancer1Key,
+  vnet1,
+  vnet1KeyInbound,
+  vnet1Key,
 } from './sample_resource_graph';
 
 export default function test() {
@@ -50,6 +53,7 @@ export default function test() {
     it('publicIp with privateIp', () => {
       const {services} = createGraphServicesMock();
       services.index.add(privateIpWithPublic);
+      services.index.add(vnet1);
 
       const backboneKey = 'backbone';
       const internetKey = 'internet';
@@ -74,14 +78,7 @@ export default function test() {
             },
           },
         ],
-        outbound: [
-          {
-            destination: publicIpWithPrivateOutboundKey,
-            constraints: {
-              sourceIp: privateIp1SourceIp,
-            },
-          },
-        ],
+        outbound: [],
       };
       assert.deepEqual(result, expectedResult);
 
@@ -94,7 +91,7 @@ export default function test() {
           key: publicIpWithPrivateInboundKey,
           routes: [
             {
-              destination: backboneKey,
+              destination: vnet1Key,
               override: {
                 destinationIp: privateIp1SourceIp,
               },
@@ -105,7 +102,7 @@ export default function test() {
           key: publicIpWithPrivateOutboundKey,
           routes: [
             {
-              destination: internetKey,
+              destination: backboneKey,
               override: {
                 sourceIp: publicIpWithPrivateSourceIp,
               },
