@@ -21,6 +21,9 @@ import {
   AzureLoadBalancerBackendPool,
   ruleProtocol,
   AzureLoadBalancer,
+  AzureVirtualMachineScaleSet,
+  AzureVmssNetworkInterfaceConfig,
+  AzureVmssIpConfiguration,
 } from '../../../src/conversion/azure';
 
 import {createMock} from './mocks';
@@ -139,6 +142,12 @@ export const backendPool1Id = backendPoolId(
 
 export const frontEndIp1Name = 'frontEndIp';
 export const frontEndIp1Id = frontEndIpId(loadBalancer1Name, frontEndIp1Name);
+
+export const vmss1Name = 'vmss';
+export const vmssId1 = vmssId(vmss1Name);
+export const vmssNicName = 'vmss-default-NetworkInterfacce';
+export const vmssIpConfigName = 'vmss-default-IpConfiguration';
+export const vmssVm0NicId = vmssNicId(vmssId1, 0, vmssNicName);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -579,6 +588,42 @@ export const loadBalancerNoRules: AzureLoadBalancer = {
 export const loadBalancerNoRuleKey = nodeServices.createKey(
   loadBalancerNoRules
 );
+
+///subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/vnet-test-01/providers/microsoft.compute/virtualmachinescalesets/vmss/virtualmachines/0/networkinterfaces/x-test-vpn-vnet-nic01
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Virtual Machine Scale Sets
+//
+///////////////////////////////////////////////////////////////////////////////
+export const vmssIpConfig: AzureVmssIpConfiguration = {
+  name: vmssIpConfigName,
+  properties: {
+    subnet: subnet1,
+  },
+};
+
+export const vmssNetworkConfig: AzureVmssNetworkInterfaceConfig = {
+  name: vmssNicName,
+  properties: {
+    ipConfigurations: [vmssIpConfig],
+  },
+};
+
+export const vmss1: AzureVirtualMachineScaleSet = {
+  type: AzureObjectType.VIRTUAL_MACHINE_SCALE_SET,
+  id: vmssId1,
+  name: vmss1Name,
+  resourceGroup,
+  properties: {
+    virtualMachineProfile: {
+      networkProfile: {
+        networkInterfaceConfigurations: [vmssNetworkConfig],
+      },
+    },
+  },
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Convenience functions
@@ -642,7 +687,15 @@ function ipId(nic: string, ip: string) {
 }
 
 function vmId(name: string) {
-  return `${resourceGroupId()}Microsoft.Compute/virtualMachines/${name}`;
+  return `${resourceGroupId()}/Microsoft.Compute/virtualMachines/${name}`;
+}
+
+function vmssId(name: string) {
+  return `${resourceGroupId()}/Microsoft.Compute/VirtualMachineScaleSets/${name}`;
+}
+
+function vmssNicId(vmssId: string, vmIndex: number, nicName: string) {
+  return `${vmssId}/VirtualMachines/${vmIndex}/NetworkInterfaces/${nicName}`;
 }
 
 function reference(item: AnyAzureObject | string): AzureObjectBase {
