@@ -32,11 +32,12 @@ export class AzureObjectIndex implements AzureIndex {
   }
 
   add(item: AnyAzureObject) {
-    if (this.idToAzureObject.has(item.id)) {
+    const normalizedId = item.id.toLowerCase();
+    if (this.idToAzureObject.has(normalizedId)) {
       const message = `Duplicate Azure resource graph id "${item.id}"`;
       throw new TypeError(message);
     }
-    this.idToAzureObject.set(item.id, item);
+    this.idToAzureObject.set(normalizedId, item);
 
     let items = this.typeToAzureObjects.get(item.type);
     if (!items) {
@@ -47,10 +48,11 @@ export class AzureObjectIndex implements AzureIndex {
   }
 
   addReference(item: AnyAzureObject, forItem: AzureObjectBase) {
-    let forMap = this.forAndTypeToAzureObject.get(forItem.id);
+    const normForId = forItem.id.toLowerCase();
+    let forMap = this.forAndTypeToAzureObject.get(normForId);
     if (!forMap) {
       forMap = new Map<AzureObjectType, Set<AnyAzureObject>>();
-      this.forAndTypeToAzureObject.set(forItem.id, forMap);
+      this.forAndTypeToAzureObject.set(normForId, forMap);
     }
     let typeSet = forMap.get(item.type);
     if (!typeSet) {
@@ -69,10 +71,11 @@ export class AzureObjectIndex implements AzureIndex {
   // Also, do we wanta dereference() method that knows about AzureReferences
   // or should we just rely on the basic getItem()?
   dereference<T extends AnyAzureObject>(ref: AzureReference<T>) {
-    let item = this.idToAzureObject.get(ref.id);
+    const normId = ref.id.toLowerCase();
+    let item = this.idToAzureObject.get(normId);
 
     if (item === undefined) {
-      item = realizeSyntheticSpec(ref.id, this);
+      item = realizeSyntheticSpec(normId, this);
 
       if (item === undefined) {
         const message = `Unknown Azure resource graph id "${ref.id}"`;
@@ -90,7 +93,8 @@ export class AzureObjectIndex implements AzureIndex {
   }
 
   for(ref: AzureObjectBase) {
-    const typeToAzureObjects = this.forAndTypeToAzureObject.get(ref.id);
+    const normId = ref.id.toLowerCase();
+    const typeToAzureObjects = this.forAndTypeToAzureObject.get(normId);
     return {
       *withType<T extends AnyAzureObject>(type: T): IterableIterator<T> {
         if (typeToAzureObjects) {
