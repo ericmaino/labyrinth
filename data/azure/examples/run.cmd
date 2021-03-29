@@ -1,7 +1,10 @@
 @ECHO OFF
 
+SET _EXAMPLES=%~p0
+SET _ROOT=%_EXAMPLES%\..\..\..
+
 :READ_FILES
-FOR /F %%y in ('DIR /S /B resource-graph.json') DO (
+FOR /F %%y in ('DIR /S /B %_ROOT%\*resource-graph.json') DO (
     CALL :ASDIR %%~dpy
 )
 GOTO :EOF
@@ -24,7 +27,7 @@ GOTO :EOF
     SET TXT_CONVERT=%_DIR%\convert.txt
     SET TXT_GRAPH=%_DIR%\graph
     ECHO Processing - %_NAME%
-    node ../../../build/src/apps/convert.js %GRAPH% %YAML% > %TXT_CONVERT%
-    node ../../../build/src/apps/graph.js %YAML% -f Internet -r -b -v > %TXT_GRAPH%.internet.txt
-    node ../../../build/src/apps/graph.js %YAML% -f AzureBackbone/inbound -r -b -v > %TXT_GRAPH%.backbone.txt
+    node %_ROOT%/build/src/apps/convert.js %GRAPH% %YAML% > %TXT_CONVERT%
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f Internet -r -b -v > %TXT_GRAPH%.internet.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f AzureBackbone/inbound -r -b -v > %TXT_GRAPH%.backbone.txt
 GOTO  :EOF
