@@ -63,7 +63,7 @@ export default function test() {
       // DESIGN NOTE: cannot call services.convert.vnet()  because our intent
       // is to test the real convertVNet(), instead of its mock.
       const parentKey = 'parent';
-      const result = convertVNet(services, vnet1, parentKey);
+      const result = convertVNet(services, vnet1, parentKey, parentKey).route;
       const {nodes: observedNodes} = services.getLabyrinthGraphSpec();
 
       // Verify the return value.

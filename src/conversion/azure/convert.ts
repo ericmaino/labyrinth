@@ -2,10 +2,13 @@ import {GraphSpec} from '../../graph';
 
 import {AzureObjectIndex} from './azure_object_index';
 import {
+  AnyIpConfiguration,
   AzureLoadBalancer,
   AzureLoadBalancerBackendPool,
   AzureNetworkInterface,
+  AzureObjectType,
   AzurePrivateIP,
+  AzurePublicIP,
   AzureResourceGraph,
   AzureSubnet,
 } from './azure_types';
@@ -78,6 +81,22 @@ export function convert(
           ipConfig.id,
           ipConfig.properties.privateIPAddress
         );
+      }
+    }
+  }
+
+  // Setup references between public ips and their vnets
+  for (const publicIp of services.index.withType(AzurePublicIP)) {
+    if (publicIp.properties.ipConfiguration) {
+      const ipConfig = services.index.dereference<AnyIpConfiguration>(
+        publicIp.properties.ipConfiguration
+      );
+
+      if (ipConfig.type !== AzureObjectType.PUBLIC_IP) {
+        if (ipConfig.properties.subnet) {
+          const vnet = services.index.getParentId(ipConfig.properties.subnet);
+          services.index.addReference(publicIp, vnet);
+        }
       }
     }
   }
