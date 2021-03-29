@@ -42,15 +42,8 @@ export function convertVNet(
   // Create outbound rule (traffic leaving vnet).
   // TODO: this should not route directly to the internet.
   // It should route to its parent (which will likely be the AzureBackbone or Gateway)
-  const routerRoutes: RoutingRuleSpec[] = [
-    {
-      destination: backboneKey,
-      constraints: {destinationIp: `except ${destinationIp}`},
-    },
-  ];
-
+  const routerRoutes: RoutingRuleSpec[] = [];
   const publicInbound: RoutingRuleSpec[] = [];
-  const publicOutbound: RoutingRuleSpec[] = [];
   // Materialize Internal Load Balancers and add Routes
   for (const ipSpec of services.index.for(spec).withType(AzurePublicIP)) {
     const route = services.convert.publicIp(
@@ -61,7 +54,7 @@ export function convertVNet(
     );
 
     publicInbound.push(...route.inbound);
-    publicOutbound.push(...route.outbound);
+    routerRoutes.push(...route.outbound);
   }
 
   // Materialize Internal Load Balancers and add Routes
@@ -77,9 +70,15 @@ export function convertVNet(
     }
   }
 
-  routerRoutes.push({
-    destination: vNetInboundKey,
-  });
+  routerRoutes.push(
+    {
+      destination: backboneKey,
+      constraints: {destinationIp: `except ${destinationIp}`},
+    },
+    {
+      destination: vNetInboundKey,
+    }
+  );
 
   const inboundRoutes: RoutingRuleSpec[] = [];
   // Materialize subnets and create routes to each.
@@ -113,7 +112,7 @@ export function convertVNet(
     },
     publicRoutes: {
       inbound: publicInbound,
-      outbound: publicOutbound,
+      outbound: [],
     },
   };
 }

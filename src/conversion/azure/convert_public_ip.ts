@@ -113,7 +113,14 @@ function publicIpWithPrivateIp(
         },
       },
     ],
-    outbound: [],
+    outbound: [
+      {
+        destination: outboundKey,
+        constraints: {
+          sourceIp: privateIpSpec.properties.privateIPAddress,
+        },
+      },
+    ],
   };
 }
 

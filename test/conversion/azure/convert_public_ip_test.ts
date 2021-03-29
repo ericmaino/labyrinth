@@ -26,7 +26,6 @@ import {
   loadBalancer1,
   loadBalancer1Key,
   vnet1,
-  vnet1KeyInbound,
   vnet1Key,
 } from './sample_resource_graph';
 
@@ -78,7 +77,14 @@ export default function test() {
             },
           },
         ],
-        outbound: [],
+        outbound: [
+          {
+            constraints: {
+              sourceIp: privateIp1SourceIp,
+            },
+            destination: publicIpWithPrivateOutboundKey,
+          },
+        ],
       };
       assert.deepEqual(result, expectedResult);
 
