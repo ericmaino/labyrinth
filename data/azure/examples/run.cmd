@@ -28,6 +28,8 @@ GOTO :EOF
     SET TXT_GRAPH=%_DIR%\graph
     ECHO Processing - %_NAME%
     node %_ROOT%/build/src/apps/convert.js %GRAPH% %YAML% > %TXT_CONVERT%
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f Internet -r -b -v > %TXT_GRAPH%.internet.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f AzureBackbone/inbound -r -b -v > %TXT_GRAPH%.backbone.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f Internet -r -b -v > %TXT_GRAPH%.from.internet.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -t Internet -r -b -v > %TXT_GRAPH%.to.internet.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm1 -r -b -v > %TXT_GRAPH%.to.vm1.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm1 -r -b -v > %TXT_GRAPH%.from.vm1.txt
 GOTO  :EOF
