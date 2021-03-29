@@ -1,0 +1,216 @@
+Options summary:
+  Not modeling source ip address spoofing (use -s flag to enable).
+  Displaying endpoints and routing nodes. (-r)
+  Displaying paths (-p or -v).
+  Verbose mode (-v).
+Backprojecting paths past NAT rewrites. (-b)
+
+Nodes:
+  publicIp1/inbound: 
+  publicIp1/outbound: 
+  publicIp2/inbound: 
+  Internet:  (endpoint)
+  AzureBackbone/outbound: 
+  loadBalancer1: 
+  vm1:  (endpoint)
+  nic1/inbound: 
+  nic1/outbound: 
+  subnet1/inbound: 
+  vnet2/router: vnet2
+  vnet2/inbound: 
+  loadBalancer2: 
+  vm2:  (endpoint)
+  nic2/inbound: 
+  nic2/outbound: 
+  vm3:  (endpoint)
+  nic3/inbound: 
+  nic3/outbound: 
+  subnet2/inbound: 
+  vnet1/router: vnet1
+  vnet1/inbound: 
+  AzureBackbone/inbound: 
+
+Nodes reachable from Internet:
+
+publicIp1/inbound:
+  routes:
+    destination ip: 20.80.145.57
+
+  paths:
+    Internet => publicIp1/inbound
+      destination ip: 20.80.145.57
+
+publicIp1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp2/inbound:
+  routes:
+    destination ip: 52.151.49.75
+
+  paths:
+    Internet => publicIp2/inbound
+      destination ip: 52.151.49.75
+
+AzureBackbone/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+loadBalancer1:
+  routes:
+    destination ip: 52.151.49.75
+
+  paths:
+    Internet => publicIp2/inbound => loadBalancer1
+      destination ip: 52.151.49.75
+
+vm1:
+  routes:
+    destination ip: 192.168.20.4
+    destination port: http
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound => subnet1/inbound => nic1/inbound => vm1
+      destination ip: 52.151.49.75
+      destination port: http
+      protocol: TCP
+
+nic1/inbound:
+  routes:
+    destination ip: 192.168.20.4
+    destination port: http
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound => subnet1/inbound => nic1/inbound
+      destination ip: 52.151.49.75
+      destination port: http
+      protocol: TCP
+
+nic1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet1/inbound:
+  routes:
+    destination ip: 192.168.20.4
+    destination port: http
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound => subnet1/inbound
+      destination ip: 52.151.49.75
+      destination port: http
+      protocol: TCP
+
+vnet2/router:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet2/inbound:
+  routes:
+    destination ip: 192.168.20.4
+    destination port: http
+    protocol: TCP
+
+  paths:
+    Internet => publicIp2/inbound => loadBalancer1 => vnet2/inbound
+      destination ip: 52.151.49.75
+      destination port: http
+      protocol: TCP
+
+loadBalancer2:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm3:
+  routes:
+    destination ip: 192.168.10.7
+
+  paths:
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic3/inbound => vm3
+      destination ip: 20.80.145.57
+
+nic3/inbound:
+  routes:
+    destination ip: 192.168.10.7
+
+  paths:
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound => subnet2/inbound => nic3/inbound
+      destination ip: 20.80.145.57
+
+nic3/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet2/inbound:
+  routes:
+    destination ip: 192.168.10.7
+
+  paths:
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound => subnet2/inbound
+      destination ip: 20.80.145.57
+
+vnet1/router:
+  routes:
+    destination ip: 192.168.10.7
+
+  paths:
+    Internet => publicIp1/inbound => vnet1/router
+      destination ip: 20.80.145.57
+
+vnet1/inbound:
+  routes:
+    destination ip: 192.168.10.7
+
+  paths:
+    Internet => publicIp1/inbound => vnet1/router => vnet1/inbound
+      destination ip: 20.80.145.57
+
+AzureBackbone/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
