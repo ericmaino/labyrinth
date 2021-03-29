@@ -1,4 +1,8 @@
-import {AzureReference, AzureVirtualMachineScaleSet} from './azure_types';
+import {
+  AzureReference,
+  AzureVirtualMachineScaleSet,
+  AzureVmssIpConfiguration,
+} from './azure_types';
 
 export interface AzureVMSSIpResult {
   readonly vmssId: AzureReference<AzureVirtualMachineScaleSet>;
@@ -79,6 +83,13 @@ export function asNicConfigSpecId(input: AzureVMSSIpResult) {
     .toLowerCase();
 }
 
+export function asIpConfigSpecId(
+  id: string,
+  ipConfig: AzureVmssIpConfiguration
+): string {
+  return `${id}/${ResourceTypes.IpConfigurations}/${ipConfig.name}`.toLowerCase();
+}
+
 export function parseAsVMSSIpConfiguration(id: string): AzureVMSSIpResult {
   if (!isValidVMSSIpConfigId(id)) {
     throw new TypeError(`Invalid VMSS IP Configuration Id '${id}'`);
@@ -118,6 +129,12 @@ export function getIpConfigWithNic(
   if (!ipconfigSpec) {
     if (useDefault) {
       ipconfigSpec = networkConfig.properties.ipConfigurations[0];
+
+      if (!ipconfigSpec) {
+        throw new TypeError(
+          `Invalid VMSS Network Interface Specification. No IPs are configured`
+        );
+      }
     } else {
       throw new TypeError(
         `Incomplete graph. Unable to locate VMSS '${vmssSpec.id}' with ip config '${vmssIds.ipConfig}'`
