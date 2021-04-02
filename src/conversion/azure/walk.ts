@@ -15,10 +15,12 @@ export function* walkAzureTypedObjects(
     const name = root.name;
     const resourceGroup = root.resourceGroup;
     const type = root.type;
+    const keyCount = Object.keys(root).length;
 
-    if (id && name && resourceGroup && type) {
+    if (id && name && resourceGroup && type && keyCount > 4) {
       yield root;
     }
+
     for (const key in root) {
       // https://eslint.org/docs/rules/no-prototype-builtins
       if (!Object.prototype.hasOwnProperty.call(root, key)) {
