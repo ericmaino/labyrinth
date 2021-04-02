@@ -359,6 +359,10 @@ export class Graph {
         p = p.previous;
       }
     }
-    return keys.join(' => ');
+
+    return keys
+      .map(key => key.split('/')[0])
+      .filter((key, index, keys) => index === 0 || keys[index - 1] !== key)
+      .join(' => ');
   }
 }
