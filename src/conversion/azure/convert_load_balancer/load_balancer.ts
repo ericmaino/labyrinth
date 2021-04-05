@@ -1,4 +1,5 @@
 import {RoutingRuleSpec, SimpleRoutingRuleSpec} from '../../../graph';
+import { Constraint } from '../../../rules/ruleSpec';
 
 import {
   AzureLoadBalancer,
@@ -76,9 +77,9 @@ export function createLoadBalancerRoutes(
       lbRuleRef
     );
     services.nodes.markTypeAsUsed(lbRule);
-    const backendPool = services.index.dereference<AzureLoadBalancerBackendPool>(
-      lbRule.properties.backendAddressPool
-    );
+    const backendPool = services.index.dereference<
+      AzureLoadBalancerBackendPool
+    >(lbRule.properties.backendAddressPool);
     services.nodes.markTypeAsUsed(backendPool);
 
     const backendIPs = backendPool.properties.backendIPConfigurations.map(
@@ -149,7 +150,10 @@ function createInboundRoute(
   return ruleSpec;
 }
 
-function getOverrides(spec: AzureLoadBalancerRule, ...backendIps: string[]) {
+function getOverrides(
+  spec: AzureLoadBalancerRule,
+  ...backendIps: string[]
+): Constraint {
   const rule = spec.properties;
   let override: {destinationPort?: string; destinationIp?: string} | undefined;
 
@@ -167,7 +171,7 @@ function getOverrides(spec: AzureLoadBalancerRule, ...backendIps: string[]) {
     override.destinationPort = rule.backendPort.toString();
   }
 
-  return override;
+  return override as Constraint;
 }
 
 function getIp(
