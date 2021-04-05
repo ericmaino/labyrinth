@@ -19,6 +19,25 @@ GOTO :EOF
     CALL :PROCESS %1 %~nx1
 GOTO :EOF
 
+:ROUTE 
+    SHIFT
+    SET FROM_NODE=%~0
+    SHIFT
+    SET TO_NODE=%~0
+    SHIFT
+    SET ROUTE_NAME=%0
+    SET ROUTE_FLAGS=%1 %2 %3 %4 %5 %6 %7 %8
+    node %_ROOT%/build/src/apps/graph.js %YAML% -f %FROM_NODE% %ROUTE_FLAGS% > %TXT_GRAPH%.from.%ROUTE_NAME%.txt
+    node %_ROOT%/build/src/apps/graph.js %YAML% -t %TO_NODE% %ROUTE_FLAGS% > %TXT_GRAPH%.to.%ROUTE_NAME%.txt
+GOTO :EOF
+
+:DEFAULT_ROUTES
+    CALL :ROUTE Internet Internet internet -r -b -v
+    CALL :ROUTE "vm1/outbound" "vm1/inbound" vm1 -r -b -v
+    CALL :ROUTE "vm2/outbound" "vm2/inbound" vm2 -r -b -v
+    CALL :ROUTE "vm3/outbound" "vm3/inbound" vm3 -r -b -v
+GOTO :EOF
+
 :PROCESS
     SET _DIR=%1
     SET _NAME=%2
@@ -28,12 +47,5 @@ GOTO :EOF
     SET TXT_GRAPH=%_DIR%\graph
     ECHO Processing - %_NAME%
     node %_ROOT%/build/src/apps/convert.js %GRAPH% %YAML% > %TXT_CONVERT%
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f Internet -r -b -v > %TXT_GRAPH%.from.internet.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm1/outbound -r -b -v > %TXT_GRAPH%.from.vm1.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm2/outbound -r -b -v > %TXT_GRAPH%.from.vm2.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f vm3/outbound -r -b -v > %TXT_GRAPH%.from.vm3.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm1/inbound -r -b -v > %TXT_GRAPH%.to.vm1.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm2/inbound -r -b -v > %TXT_GRAPH%.to.vm2.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -t vm3/inbound -r -b -v > %TXT_GRAPH%.to.vm3.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -t Internet -r -b -v > %TXT_GRAPH%.to.internet.txt
+    CALL :DEFAULT_ROUTES
 GOTO  :EOF

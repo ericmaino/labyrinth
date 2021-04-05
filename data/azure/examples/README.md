@@ -6,7 +6,7 @@ Write something useful here soon.
 - Create a folder under examples
 - Use the following command to generate a graph. Scope it to the appropriate resource group or groups
   ```
-  az graph query --output json -q 'Resources | where resourceGroup in ('x-vnet-examples') | where type !in ("microsoft.compute/virtualmachines/extensions", "microsoft.compute/disks", "microsoft.compute/sshpublickeys", "microsoft.storage/storageaccounts")' 
+  az graph query --output json -q 'Resources | where resourceGroup in ("x-vnet-example") | where type !in ("microsoft.compute/virtualmachines/extensions", "microsoft.compute/disks", "microsoft.compute/sshpublickeys", "microsoft.storage/storageaccounts")' 
   ```
 - Save the output as a file called `resource-graph.json` within the new folder
 - Execute `run.cmd` from within the Examples directory
