@@ -91,6 +91,16 @@ nodes:
           destinationIp: 10.0.88.4
     filters:
       - action: allow
+        priority: 100
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: '*'
+          sourcePort: '*'
+          destinationIp: '*'
+          destinationPort: '22'
+          protocol: TCP
+      - action: allow
         priority: 65000
         id: 1
         source: data/azure/resource-graph-1.json
@@ -120,22 +130,22 @@ nodes:
           destinationIp: '*'
           destinationPort: '*'
           protocol: '*'
-      - action: allow
-        priority: 100
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: '*'
-          sourcePort: '*'
-          destinationIp: '*'
-          destinationPort: '22'
-          protocol: TCP
   - key: subnet1/outbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-vnet-example/providers/microsoft.network/virtualnetworks/virtual-network/subnets/jump-box/outbound
     routes:
       - destination: vnet1/outbound
     filters:
+      - action: deny
+        priority: 110
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: '*'
+          sourcePort: '*'
+          destinationIp: '*'
+          destinationPort: '*'
+          protocol: '*'
       - action: allow
         priority: 65000
         id: 1
@@ -166,16 +176,6 @@ nodes:
           destinationIp: '*'
           destinationPort: '*'
           protocol: '*'
-      - action: deny
-        priority: 110
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: '*'
-          sourcePort: '*'
-          destinationIp: '*'
-          destinationPort: '*'
-          protocol: '*'
   - key: subnet2/inbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-vnet-example/providers/microsoft.network/virtualnetworks/virtual-network/subnets/public-services/inbound
@@ -190,6 +190,46 @@ nodes:
         constraints:
           destinationIp: 10.0.100.6
     filters:
+      - action: allow
+        priority: 100
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: Internet
+          sourcePort: '*'
+          destinationIp: '*'
+          destinationPort: '8080'
+          protocol: TCP
+      - action: allow
+        priority: 110
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: Internet
+          sourcePort: '*'
+          destinationIp: '*'
+          destinationPort: '8443'
+          protocol: TCP
+      - action: allow
+        priority: 200
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: 10.0.88.0/24
+          sourcePort: '*'
+          destinationIp: vnet1
+          destinationPort: '22'
+          protocol: '*'
+      - action: deny
+        priority: 4096
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: vnet1
+          sourcePort: '*'
+          destinationIp: vnet1
+          destinationPort: '*'
+          protocol: '*'
       - action: allow
         priority: 65000
         id: 1
@@ -219,46 +259,6 @@ nodes:
           sourcePort: '*'
           destinationIp: '*'
           destinationPort: '*'
-          protocol: '*'
-      - action: allow
-        priority: 100
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: Internet
-          sourcePort: '*'
-          destinationIp: '*'
-          destinationPort: '8080'
-          protocol: TCP
-      - action: allow
-        priority: 110
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: Internet
-          sourcePort: '*'
-          destinationIp: '*'
-          destinationPort: '8443'
-          protocol: TCP
-      - action: deny
-        priority: 4096
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: vnet1
-          sourcePort: '*'
-          destinationIp: vnet1
-          destinationPort: '*'
-          protocol: '*'
-      - action: allow
-        priority: 200
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: 10.0.88.0/24
-          sourcePort: '*'
-          destinationIp: vnet1
-          destinationPort: '22'
           protocol: '*'
   - key: subnet2/outbound
     name: >-

@@ -1,0 +1,262 @@
+Options summary:
+  Not modeling source ip address spoofing (use -s flag to enable).
+  Displaying endpoints and routing nodes. (-r)
+  Displaying paths (-p or -v).
+  Verbose mode (-v).
+Backprojecting paths past NAT rewrites. (-b)
+
+Nodes:
+  AzureBackbone/outbound: 
+  Internet:  (endpoint)
+  loadBalancer1: 
+  nic1/inbound: 
+  nic1/outbound: 
+  nic2/inbound: 
+  nic2/outbound: 
+  nic3/inbound: 
+  nic3/outbound: 
+  nic4/inbound: 
+  nic4/outbound: 
+  publicIp1/inbound: 
+  publicIp1/outbound: 
+  publicIp2/inbound: 
+  subnet1/inbound: 
+  subnet1/outbound: 
+  subnet2/inbound: 
+  subnet2/outbound: 
+  vm1/inbound:  (endpoint)
+  vm1/outbound:  (endpoint)
+  vm2/inbound:  (endpoint)
+  vm2/outbound:  (endpoint)
+  vm3/inbound:  (endpoint)
+  vm3/outbound:  (endpoint)
+  vm4/inbound:  (endpoint)
+  vm4/outbound:  (endpoint)
+  vnet1/inbound: 
+  vnet1/outbound: 
+  vnet1/router: vnet1
+
+Nodes that can reach Internet:
+
+AzureBackbone/outbound:
+  routes:
+    (universe)
+
+  paths:
+    Internet => AzureBackbone
+      (universe)
+
+loadBalancer1:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic2/outbound:
+  routes:
+    source ip: except 10.0.88.4
+    destination ip: Internet
+
+  paths:
+    subnet2 => vnet1 => AzureBackbone => Internet => AzureBackbone
+      source ip: except 10.0.88.4
+      destination ip: Internet
+
+nic3/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic3/outbound:
+  routes:
+    source ip: except 10.0.88.4
+    destination ip: Internet
+
+  paths:
+    subnet2 => vnet1 => AzureBackbone => Internet => AzureBackbone
+      source ip: except 10.0.88.4
+      destination ip: Internet
+
+nic4/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+nic4/outbound:
+  routes:
+    source ip: except 10.0.88.4
+    destination ip: Internet
+
+  paths:
+    subnet2 => vnet1 => AzureBackbone => Internet => AzureBackbone
+      source ip: except 10.0.88.4
+      destination ip: Internet
+
+publicIp1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+publicIp1/outbound:
+  routes:
+    source ip: 52.156.96.94
+
+  paths:
+    AzureBackbone => Internet => AzureBackbone
+      (universe)
+
+publicIp2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+subnet2/outbound:
+  routes:
+    source ip: except 10.0.88.4
+    destination ip: Internet
+
+  paths:
+    vnet1 => AzureBackbone => Internet => AzureBackbone
+      source ip: except 10.0.88.4
+      destination ip: Internet
+
+vm1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm1/outbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm2/outbound:
+  routes:
+    source ip: 10.0.100.4
+    destination ip: Internet
+
+  paths:
+    nic2 => subnet2 => vnet1 => AzureBackbone => Internet => AzureBackbone
+      source ip: 10.0.100.4
+      destination ip: Internet
+
+vm3/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm3/outbound:
+  routes:
+    source ip: 10.0.100.5
+    destination ip: Internet
+
+  paths:
+    nic3 => subnet2 => vnet1 => AzureBackbone => Internet => AzureBackbone
+      source ip: 10.0.100.5
+      destination ip: Internet
+
+vm4/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vm4/outbound:
+  routes:
+    source ip: 10.0.100.6
+    destination ip: Internet
+
+  paths:
+    nic4 => subnet2 => vnet1 => AzureBackbone => Internet => AzureBackbone
+      source ip: 10.0.100.6
+      destination ip: Internet
+
+vnet1/inbound:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+
+vnet1/outbound:
+  routes:
+    source ip: except 10.0.88.4
+    destination ip: Internet
+
+  paths:
+    AzureBackbone => Internet => AzureBackbone
+      source ip: except 10.0.88.4
+      destination ip: Internet
+
+vnet1/router:
+  routes:
+    (no routes)
+
+  paths:
+    (no paths)
+

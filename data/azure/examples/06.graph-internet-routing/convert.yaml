@@ -58,6 +58,16 @@ nodes:
       - destination: vm1/inbound
     filters:
       - action: allow
+        priority: 300
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: '*'
+          sourcePort: '*'
+          destinationIp: '*'
+          destinationPort: '443'
+          protocol: TCP
+      - action: allow
         priority: 65000
         id: 1
         source: data/azure/resource-graph-1.json
@@ -87,16 +97,6 @@ nodes:
           destinationIp: '*'
           destinationPort: '*'
           protocol: '*'
-      - action: allow
-        priority: 300
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: '*'
-          sourcePort: '*'
-          destinationIp: '*'
-          destinationPort: '443'
-          protocol: TCP
   - key: nic1/outbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-vnet-examples/providers/microsoft.network/networkinterfaces/vm-001505/outbound
@@ -150,6 +150,26 @@ nodes:
       - destination: vm3/inbound
     filters:
       - action: allow
+        priority: 300
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: '*'
+          sourcePort: '*'
+          destinationIp: '*'
+          destinationPort: '3389'
+          protocol: TCP
+      - action: allow
+        priority: 320
+        id: 1
+        source: data/azure/resource-graph-1.json
+        constraints:
+          sourceIp: '*'
+          sourcePort: '*'
+          destinationIp: '*'
+          destinationPort: '80'
+          protocol: TCP
+      - action: allow
         priority: 65000
         id: 1
         source: data/azure/resource-graph-1.json
@@ -179,26 +199,6 @@ nodes:
           destinationIp: '*'
           destinationPort: '*'
           protocol: '*'
-      - action: allow
-        priority: 300
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: '*'
-          sourcePort: '*'
-          destinationIp: '*'
-          destinationPort: '3389'
-          protocol: TCP
-      - action: allow
-        priority: 320
-        id: 1
-        source: data/azure/resource-graph-1.json
-        constraints:
-          sourceIp: '*'
-          sourcePort: '*'
-          destinationIp: '*'
-          destinationPort: '80'
-          protocol: TCP
   - key: nic3/outbound
     name: >-
       /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/x-vnet-examples/providers/microsoft.network/networkinterfaces/vm-002237/outbound
