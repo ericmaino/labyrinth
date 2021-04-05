@@ -41,11 +41,19 @@ GOTO :EOF
 :PROCESS
     SET _DIR=%1
     SET _NAME=%2
+    SET ROUTES=%_DIR%\_ROUTES
     SET GRAPH=%_DIR%\resource-graph.json
     SET YAML=%_DIR%\convert.yaml
     SET TXT_CONVERT=%_DIR%\convert.txt
     SET TXT_GRAPH=%_DIR%\graph
     ECHO Processing - %_NAME%
     node %_ROOT%/build/src/apps/convert.js %GRAPH% %YAML% > %TXT_CONVERT%
-    CALL :DEFAULT_ROUTES
+
+    IF EXIST %ROUTES% (
+        FOR /F "tokens=*" %%X IN (%ROUTES%) DO (
+            CALL :ROUTE %%X
+        )
+    ) ELSE (
+        CALL :DEFAULT_ROUTES
+    )
 GOTO  :EOF
