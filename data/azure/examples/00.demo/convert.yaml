@@ -215,7 +215,7 @@ nodes:
         id: 1
         source: data/azure/resource-graph-1.json
         constraints:
-          sourceIp: 10.0.88.0/24
+          sourceIp: 10.0.88.5
           sourcePort: '*'
           destinationIp: vnet1
           destinationPort: '22'

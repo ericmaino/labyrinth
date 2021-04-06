@@ -1277,7 +1277,7 @@
             "priority": 200,
             "protocol": "*",
             "provisioningState": "Succeeded",
-            "sourceAddressPrefix": "10.0.88.0/24",
+            "sourceAddressPrefix": "10.0.88.5",
             "sourceAddressPrefixes": [],
             "sourcePortRange": "*",
             "sourcePortRanges": []

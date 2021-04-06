@@ -57,7 +57,7 @@ vm2/inbound:
       destination port: http
       protocol: TCP
 
-      source ip: 10.0.88.0/24
+      source ip: 10.0.88.5
       destination ip: 52.183.88.218
       destination port: http
       protocol: TCP
@@ -72,7 +72,7 @@ vm2/inbound:
       destination port: https
       protocol: TCP
 
-      source ip: 10.0.88.0/24
+      source ip: 10.0.88.5
       destination ip: 52.183.88.218
       destination port: https
       protocol: TCP
@@ -103,7 +103,7 @@ vm3/inbound:
       destination port: http
       protocol: TCP
 
-      source ip: 10.0.88.0/24
+      source ip: 10.0.88.5
       destination ip: 52.183.88.218
       destination port: http
       protocol: TCP
@@ -118,7 +118,7 @@ vm3/inbound:
       destination port: https
       protocol: TCP
 
-      source ip: 10.0.88.0/24
+      source ip: 10.0.88.5
       destination ip: 52.183.88.218
       destination port: https
       protocol: TCP
@@ -149,7 +149,7 @@ vm4/inbound:
       destination port: http
       protocol: TCP
 
-      source ip: 10.0.88.0/24
+      source ip: 10.0.88.5
       destination ip: 52.183.88.218
       destination port: http
       protocol: TCP
@@ -164,7 +164,7 @@ vm4/inbound:
       destination port: https
       protocol: TCP
 
-      source ip: 10.0.88.0/24
+      source ip: 10.0.88.5
       destination ip: 52.183.88.218
       destination port: https
       protocol: TCP
