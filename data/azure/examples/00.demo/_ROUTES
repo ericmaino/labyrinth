@@ -1,3 +1,4 @@
-Internet Internet 0.internet.path -p
-Internet Internet 1.internet.backtrace -p -b
-Internet Internet 2.internet.routes -r -b
+0.from.internet -f Internet -p
+0.to.internet -t Internet -p
+1.from.internet -f Internet -p -b
+1.to.internet -t Internet -p -b

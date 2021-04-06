@@ -19,7 +19,7 @@ GOTO :EOF
     CALL :PROCESS %1 %~nx1
 GOTO :EOF
 
-:ROUTE 
+:SYM_ROUTE
     SHIFT
     SET FROM_NODE=%~0
     SHIFT
@@ -27,15 +27,22 @@ GOTO :EOF
     SHIFT
     SET ROUTE_NAME=%0
     SET ROUTE_FLAGS=%1 %2 %3 %4 %5 %6 %7 %8
-    node %_ROOT%/build/src/apps/graph.js %YAML% -f %FROM_NODE% %ROUTE_FLAGS% > %TXT_GRAPH%.from.%ROUTE_NAME%.txt
-    node %_ROOT%/build/src/apps/graph.js %YAML% -t %TO_NODE% %ROUTE_FLAGS% > %TXT_GRAPH%.to.%ROUTE_NAME%.txt
+    CALL :ROUTE "from.%ROUTE_NAME%" -f %FROM_NODE% %ROUTE_FLAGS%
+    CALL :ROUTE "to.%ROUTE_NAME%" -t %TO_NODE% %ROUTE_FLAGS%
+GOTO :EOF
+
+:ROUTE 
+    SHIFT
+    SET _ROUTE_NAME=%0
+    SET _ROUTE_FLAGS=%1 %2 %3 %4 %5 %6 %7 %8 %9
+    node %_ROOT%/build/src/apps/graph.js %YAML% %_ROUTE_FLAGS% > %TXT_GRAPH%.%_ROUTE_NAME%.txt
 GOTO :EOF
 
 :DEFAULT_ROUTES
-    CALL :ROUTE Internet Internet internet -r -b -v
-    CALL :ROUTE "vm1/outbound" "vm1/inbound" vm1 -r -b -v
-    CALL :ROUTE "vm2/outbound" "vm2/inbound" vm2 -r -b -v
-    CALL :ROUTE "vm3/outbound" "vm3/inbound" vm3 -r -b -v
+    CALL :SYM_ROUTE Internet Internet internet -r -b -v
+    CALL :SYM_ROUTE "vm1/outbound" "vm1/inbound" vm1 -r -b -v
+    CALL :SYM_ROUTE "vm2/outbound" "vm2/inbound" vm2 -r -b -v
+    CALL :SYM_ROUTE "vm3/outbound" "vm3/inbound" vm3 -r -b -v
 GOTO :EOF
 
 :PROCESS
