@@ -49,20 +49,20 @@ vm-001505 (nic1/outbound):
       source ip: 172.16.0.4
       destination ip: Internet
     vm-001505 => x-example-vnet => AzureBackbone => Internet
-      source ip: except 172.16.0.4
+      source ip: 0.0.0.0-172.16.0.3,172.16.0.5-255.255.255.255
       destination ip: Internet
 
 vm-lb-016 (nic2/outbound):
   flow:
-    destination ip: except vnet1
+    destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
   paths:
     vm-lb-016 => x-example-vnet => vm-001-ip => AzureBackbone => Internet
       source ip: 172.16.0.4
-      destination ip: except vnet1
+      destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
     vm-lb-016 => x-example-vnet => AzureBackbone => Internet
-      source ip: except 172.16.0.4
-      destination ip: except vnet1
+      source ip: 0.0.0.0-172.16.0.3,172.16.0.5-255.255.255.255
+      destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
 vm-002237 (nic3/outbound):
   flow:
@@ -73,7 +73,7 @@ vm-002237 (nic3/outbound):
       source ip: 172.16.0.4
       destination ip: Internet
     vm-002237 => x-example-vnet => AzureBackbone => Internet
-      source ip: except 172.16.0.4
+      source ip: 0.0.0.0-172.16.0.3,172.16.0.5-255.255.255.255
       destination ip: Internet
 
 vm-001-ip (publicIp1/outbound):
@@ -97,12 +97,12 @@ vm-001 (vm1/outbound):
 vm-lb-01 (vm2/outbound):
   flow:
     source ip: 172.16.0.5
-    destination ip: except vnet1
+    destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
   paths:
     vm-lb-01 => vm-lb-016 => x-example-vnet => AzureBackbone => Internet
       source ip: 172.16.0.5
-      destination ip: except vnet1
+      destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
 vm-002 (vm3/outbound):
   flow:
@@ -116,13 +116,13 @@ vm-002 (vm3/outbound):
 
 x-example-vnet (vnet1/outbound):
   flow:
-    destination ip: except vnet1
+    destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
   paths:
     x-example-vnet => vm-001-ip => AzureBackbone => Internet
       source ip: 172.16.0.4
-      destination ip: except vnet1
+      destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
     x-example-vnet => AzureBackbone => Internet
-      source ip: except 172.16.0.4
-      destination ip: except vnet1
+      source ip: 0.0.0.0-172.16.0.3,172.16.0.5-255.255.255.255
+      destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 

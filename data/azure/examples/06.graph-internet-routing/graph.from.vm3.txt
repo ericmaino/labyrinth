@@ -43,22 +43,22 @@ Nodes reachable from vm-lb-01 (vm2/outbound):
 AzureBackbone (AzureBackbone/outbound):
   flow:
     source ip: 172.16.0.5
-    destination ip: except vnet1
+    destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
   paths:
     vm-lb-01 => vm-lb-016 => x-example-vnet => AzureBackbone
       source ip: 172.16.0.5
-      destination ip: except vnet1
+      destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
 Internet:
   flow:
     source ip: 172.16.0.5
-    destination ip: except vnet1
+    destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
   paths:
     vm-lb-01 => vm-lb-016 => x-example-vnet => AzureBackbone => Internet
       source ip: 172.16.0.5
-      destination ip: except vnet1
+      destination ip: 0.0.0.0-172.15.255.255,172.16.1.0-255.255.255.255
 
 ilb (loadBalancer2):
   flow:

@@ -77,17 +77,7 @@ export class DimensionedRange {
   format(prefix = ''): string {
     const name = this.dimension.name;
     const value = splitAndSort(this.dimension.type.formatter(this.range));
-    const complement = splitAndSort(
-      this.dimension.type.formatter(this.complement().range)
-    );
-
-    // TODO: 7 is equal to the length of 'except '. Figure out a less
-    // brittle way to do this length check.
-    if (value.length < complement.length + 7) {
-      return `${prefix}${name}: ${value}`;
-    } else {
-      return `${prefix}${name}: except ${complement}`;
-    }
+    return `${prefix}${name}: ${value}`;
   }
 
   // The fastFormat() function is used to generate prime implicant keys
