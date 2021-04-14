@@ -90,4 +90,8 @@ export function convertResourceGraph(services: GraphServices) {
     internetKey,
     azureUniverse.internet.join(',')
   );
+
+  azureUniverse.symbols.forEach((addresses, serviceTag) =>
+    services.symbols.defineServiceTag(serviceTag, addresses.join(','))
+  );
 }
