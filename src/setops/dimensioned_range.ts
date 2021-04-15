@@ -76,8 +76,10 @@ export class DimensionedRange {
 
   format(prefix = ''): string {
     const name = this.dimension.name;
-    const value = this.dimension.type.formatter(this.range);
-    const complement = this.dimension.type.formatter(this.complement().range);
+    const value = splitAndSort(this.dimension.type.formatter(this.range));
+    const complement = splitAndSort(
+      this.dimension.type.formatter(this.complement().range)
+    );
 
     // TODO: 7 is equal to the length of 'except '. Figure out a less
     // brittle way to do this length check.
@@ -111,4 +113,13 @@ export class DimensionedRange {
     // include the square brackets in the first place.
     return `${name}: ${value}`;
   }
+}
+
+function splitAndSort(input: string): string {
+  const match = input.match(/[^\s,]+/g);
+
+  if (!match) {
+    return '';
+  }
+  return match.sort().join(',');
 }
