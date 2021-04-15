@@ -1,6 +1,6 @@
 import DRange from 'drange';
 import * as ip from 'ip';
-import {SymbolTable} from '../graph/symbol_store';
+import {SymbolTable} from '../graph';
 
 // DRange field formatting function. Has two use cases:
 //
@@ -60,11 +60,18 @@ export function formatDRangeWithSymbols(
   const includedSymbols: string[] = [];
   const remainingRange = r.clone();
 
-  // First experiment, only reduce using the internet symbol
-  const symbolRange = symbolTable.getInternet();
-  if (rangeIncludes(remainingRange, symbolRange.range)) {
-    includedSymbols.push(symbolRange.name);
-    remainingRange.subtract(symbolRange.range);
+  // This is a brute force walk over all of the symbols 
+  // this is far from optimmal, however it helps to illustrate
+  /// the possibilities
+  for (const symbolRange of symbolTable) {
+    if (rangeIncludes(remainingRange, symbolRange.range)) {
+      includedSymbols.push(symbolRange.name);
+      remainingRange.subtract(symbolRange.range);
+
+      if (remainingRange.length === 0) {
+        break;
+      }
+    }
   }
 
   if (remainingRange.length > 0) {
