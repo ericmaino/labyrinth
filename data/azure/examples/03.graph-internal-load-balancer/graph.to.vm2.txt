@@ -47,7 +47,7 @@ vm-001505 (nic1/outbound):
 
     source ip: vnet1
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
     source ip: vnet1
@@ -62,7 +62,7 @@ vm-001505 (nic1/outbound):
     vm-001505 => x-example-vnet => another => vm-002237 => vm-002
       source ip: vnet1
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
       source ip: vnet1
@@ -75,7 +75,7 @@ vm-002237 (nic2/inbound):
     source ip: vnet1
     destination ip: vnet1
 
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
   paths:
@@ -85,7 +85,7 @@ vm-002237 (nic2/inbound):
       source ip: vnet1
       destination ip: vnet1
 
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
 vm-002237 (nic2/outbound):
@@ -97,7 +97,7 @@ vm-002237 (nic2/outbound):
 
     source ip: vnet1
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
     source ip: vnet1
@@ -112,7 +112,7 @@ vm-002237 (nic2/outbound):
     vm-002237 => x-example-vnet => another => vm-002237 => vm-002
       source ip: vnet1
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
       source ip: vnet1
@@ -121,19 +121,19 @@ vm-002237 (nic2/outbound):
 another (subnet2/inbound):
   flow:
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.20
 
   paths:
     another => vm-002237 => vm-002
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.20
 
 vm-001 (vm1/outbound):
@@ -145,7 +145,7 @@ vm-001 (vm1/outbound):
 
     source ip: 172.16.0.4
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
     source ip: 172.16.0.4
@@ -160,7 +160,7 @@ vm-001 (vm1/outbound):
     vm-001 => vm-001505 => x-example-vnet => another => vm-002237 => vm-002
       source ip: 172.16.0.4
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
       source ip: 172.16.0.4
@@ -175,7 +175,7 @@ vm-002 (vm2/outbound):
 
     source ip: 172.16.0.20
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
     source ip: 172.16.0.20
@@ -190,7 +190,7 @@ vm-002 (vm2/outbound):
     vm-002 => vm-002237 => x-example-vnet => another => vm-002237 => vm-002
       source ip: 172.16.0.20
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
       source ip: 172.16.0.20
@@ -199,19 +199,19 @@ vm-002 (vm2/outbound):
 x-example-vnet (vnet1/inbound):
   flow:
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.20
 
   paths:
     x-example-vnet => another => vm-002237 => vm-002
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.20
 
 x-example-vnet (vnet1/outbound):
@@ -221,10 +221,10 @@ x-example-vnet (vnet1/outbound):
     protocol: TCP
 
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.20
 
   paths:
@@ -234,10 +234,10 @@ x-example-vnet (vnet1/outbound):
       protocol: TCP
     x-example-vnet => another => vm-002237 => vm-002
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.20
 
 x-example-vnet (vnet1/router):
@@ -247,10 +247,10 @@ x-example-vnet (vnet1/router):
     protocol: TCP
 
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.20
 
   paths:
@@ -260,9 +260,9 @@ x-example-vnet (vnet1/router):
       protocol: TCP
     x-example-vnet => another => vm-002237 => vm-002
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.20
 

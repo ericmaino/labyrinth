@@ -108,12 +108,12 @@ vm-001505 (nic1/inbound):
 
 vm-001505 (nic1/outbound):
   flow:
-    source ip: except 172.16.0.0/30, 172.16.0.5-172.16.0.255, vnet2
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0/30,172.16.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.16.0.4
+    source ip: 172.16.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
     source ip: vnet1
@@ -152,19 +152,19 @@ vm-001505 (nic1/outbound):
 
 vm-lb-016 (nic2/outbound):
   flow:
-    source ip: except 172.16.0.0/30, 172.16.0.5-172.16.0.255, vnet2
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0/30,172.16.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.16.0.4
+    source ip: 172.16.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
     destination ip: 172.16.0.4
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.4
 
   paths:
@@ -189,17 +189,17 @@ vm-lb-016 (nic2/outbound):
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.4
 
 vm-002237 (nic3/outbound):
   flow:
-    source ip: except 172.16.0.0/30, 172.16.0.5-172.16.0.255, vnet2
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0/30,172.16.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.16.0.4
+    source ip: 172.16.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
     source ip: vnet1
@@ -238,19 +238,19 @@ vm-002237 (nic3/outbound):
 
 x-example-vnet-nic01 (nic4/outbound):
   flow:
-    source ip: except 172.16.0.0/30, 172.16.0.5-172.16.0.255, vnet2
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0/30,172.16.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.16.0.4
+    source ip: 172.16.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
     destination ip: 172.16.0.4
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.4
 
   paths:
@@ -275,24 +275,24 @@ x-example-vnet-nic01 (nic4/outbound):
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.4
 
 x-example-vnet-nic01 (nic5/outbound):
   flow:
-    source ip: except 172.16.0.0/30, 172.16.0.5-172.16.0.255, vnet2
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0/30,172.16.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.16.0.4
+    source ip: 172.16.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
     destination ip: 172.16.0.4
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.4
 
   paths:
@@ -317,17 +317,17 @@ x-example-vnet-nic01 (nic5/outbound):
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.4
 
 vm-2-001449 (nic6/outbound):
   flow:
-    source ip: except vnet1, 172.17.0.0/30, 172.17.0.5-172.17.255.255
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0-172.17.0.3,172.17.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.17.0.4
+    source ip: 172.17.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
   paths:
@@ -353,14 +353,14 @@ vm-001-internet (publicIp1/endpoint):
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
 
   paths:
     vm-001-internet => x-example-vnet => default => vm-001505 => vm-001
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
 
 vm-001-internet (publicIp1/outbound):
   flow:
@@ -400,7 +400,7 @@ default (subnet1/inbound):
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.4
 
   paths:
@@ -409,18 +409,18 @@ default (subnet1/inbound):
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.4
 
 vm-001 (vm1/outbound):
   flow:
     source ip: 172.16.0.4
-    destination ip: 20.47.120.40, 172.16.0.4
+    destination ip: 172.16.0.4,20.47.120.40
     destination port: https
     protocol: TCP
 
     source ip: 172.16.0.4
-    destination ip: 20.47.120.40, 172.16.0.4
+    destination ip: 172.16.0.4,20.47.120.40
 
   paths:
     vm-001 => vm-001505 => x-example-vnet => vm-001-internet => Internet => vm-001-internet => x-example-vnet => default => vm-001505 => vm-001
@@ -546,7 +546,7 @@ x-example-vnet (vnet1/inbound):
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.4
 
   paths:
@@ -555,24 +555,24 @@ x-example-vnet (vnet1/inbound):
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.4
 
 x-example-vnet (vnet1/outbound):
   flow:
-    source ip: except 172.16.0.0/30, 172.16.0.5-172.16.0.255, vnet2
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0/30,172.16.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.16.0.4
+    source ip: 172.16.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
     destination ip: 172.16.0.4
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.4
 
   paths:
@@ -597,7 +597,7 @@ x-example-vnet (vnet1/outbound):
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.4
 
 x-example-vnet (vnet1/router):
@@ -606,7 +606,7 @@ x-example-vnet (vnet1/router):
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, vnet1
+    source ip: AzureLoadBalancer,vnet1
     destination ip: 172.16.0.4
 
   paths:
@@ -615,17 +615,17 @@ x-example-vnet (vnet1/router):
       destination port: https
       protocol: TCP
 
-      source ip: AzureLoadBalancer, vnet1
+      source ip: AzureLoadBalancer,vnet1
       destination ip: 172.16.0.4
 
 x-example-vnet-2 (vnet2/outbound):
   flow:
-    source ip: except vnet1, 172.17.0.0/30, 172.17.0.5-172.17.255.255
+    source ip: except 0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,104.212.36.0/22,104.212.52.0/22,129.75.0.0/16,13.96.0.0/13,134.177.0.0/16,138.196.0.0/16,141.251.0.0/16,146.147.0.0/16,169.254.0.0/16,172.16.0.0-172.17.0.3,172.17.0.5-172.31.255.255,192.0.2.0/24,192.100.102.0/23,192.168.0.0/16,192.32.0.0/16,198.18.0.0/15,20.128.0.0/16,20.130.0.0/16,20.144.0.0/14,20.176.0.0/13,21.0.0.0-22.255.255.255,224.0.0.0/3,25.0.0.0/12,25.142.0.0-25.239.255.255,25.244.0.0-25.250.85.255,25.251.0.0-25.254.8.255,25.254.16.0/20,25.254.64.0-25.255.255.255,25.28.0.0/14,25.33.80.0/20,25.41.3.0/25,25.64.0.0-25.131.255.255,40.66.128.0/17,52.132.0.0/14,52.145.0.0/16,loopback
     destination ip: 20.47.120.40
     destination port: https
     protocol: TCP
 
-    source ip: AzureLoadBalancer, 172.17.0.4
+    source ip: 172.17.0.4,AzureLoadBalancer
     destination ip: 20.47.120.40
 
   paths:

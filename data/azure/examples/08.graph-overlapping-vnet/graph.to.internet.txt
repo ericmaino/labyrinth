@@ -217,13 +217,13 @@ x-example-vnet (vnet1/outbound):
 
 x-example-vnet-2 (vnet2/outbound):
   flow:
-    destination ip: Internet
+    destination ip: except vnet2
 
   paths:
     x-example-vnet-2 => AzureBackbone => Internet
       source ip: except 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet2
     x-example-vnet-2 => vm-2-001-ip => Internet
       source ip: 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet2
 

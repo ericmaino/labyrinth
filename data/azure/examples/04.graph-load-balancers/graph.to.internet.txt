@@ -54,15 +54,15 @@ vm-001505 (nic1/outbound):
 
 vm-lb-016 (nic2/outbound):
   flow:
-    destination ip: Internet
+    destination ip: except vnet1
 
   paths:
     vm-lb-016 => x-example-vnet => vm-001-ip => AzureBackbone => Internet
       source ip: 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet1
     vm-lb-016 => x-example-vnet => AzureBackbone => Internet
       source ip: except 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet1
 
 vm-002237 (nic3/outbound):
   flow:
@@ -97,12 +97,12 @@ vm-001 (vm1/outbound):
 vm-lb-01 (vm2/outbound):
   flow:
     source ip: 172.16.0.5
-    destination ip: Internet
+    destination ip: except vnet1
 
   paths:
     vm-lb-01 => vm-lb-016 => x-example-vnet => AzureBackbone => Internet
       source ip: 172.16.0.5
-      destination ip: Internet
+      destination ip: except vnet1
 
 vm-002 (vm3/outbound):
   flow:
@@ -116,13 +116,13 @@ vm-002 (vm3/outbound):
 
 x-example-vnet (vnet1/outbound):
   flow:
-    destination ip: Internet
+    destination ip: except vnet1
 
   paths:
     x-example-vnet => vm-001-ip => AzureBackbone => Internet
       source ip: 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet1
     x-example-vnet => AzureBackbone => Internet
       source ip: except 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet1
 

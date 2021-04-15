@@ -26,7 +26,7 @@ vm0 (vm2/inbound):
   flow:
     source ip: Internet
     destination ip: 10.0.100.4
-    destination port: 8080, 8443
+    destination port: 8080,8443
     protocol: TCP
 
   paths:
@@ -45,7 +45,7 @@ vm1 (vm3/inbound):
   flow:
     source ip: Internet
     destination ip: 10.0.100.5
-    destination port: 8080, 8443
+    destination port: 8080,8443
     protocol: TCP
 
   paths:
@@ -64,7 +64,7 @@ vm2 (vm4/inbound):
   flow:
     source ip: Internet
     destination ip: 10.0.100.6
-    destination port: 8080, 8443
+    destination port: 8080,8443
     protocol: TCP
 
   paths:

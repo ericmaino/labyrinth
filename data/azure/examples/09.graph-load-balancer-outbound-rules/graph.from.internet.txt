@@ -71,7 +71,7 @@ vm-lb-016 (nic2/inbound):
   flow:
     source ip: Internet
     destination ip: 52.247.250.222
-    destination port: 800, 3389
+    destination port: 3389,800
     protocol: TCP
 
   paths:
@@ -161,7 +161,7 @@ default (subnet1/inbound):
 
     source ip: Internet
     destination ip: 52.247.250.222
-    destination port: 800, 3389
+    destination port: 3389,800
     protocol: TCP
 
   paths:
@@ -227,7 +227,7 @@ vm-lb-01 (vm2/inbound):
   flow:
     source ip: Internet
     destination ip: 52.247.250.222
-    destination port: 800, 3389
+    destination port: 3389,800
     protocol: TCP
 
   paths:
@@ -287,7 +287,7 @@ x-example-vnet (vnet1/inbound):
 
     source ip: Internet
     destination ip: 52.247.250.222
-    destination port: 800, 3242, 3389
+    destination port: 3242,3389,800
     protocol: TCP
 
   paths:

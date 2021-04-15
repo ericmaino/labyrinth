@@ -162,7 +162,7 @@ another (subnet2/inbound):
     protocol: TCP
 
     source ip: 172.16.0.5
-    destination ip: 172.16.0.16-172.16.0.20, 172.16.0.22-172.16.0.31
+    destination ip: 172.16.0.16-172.16.0.20,172.16.0.22-172.16.0.31
 
   paths:
     vm-lb-01 => vm-lb-016 => x-example-vnet => ilb => x-example-vnet => another
@@ -172,7 +172,7 @@ another (subnet2/inbound):
       protocol: TCP
     vm-lb-01 => vm-lb-016 => x-example-vnet => another
       source ip: 172.16.0.5
-      destination ip: 172.16.0.16-172.16.0.20, 172.16.0.22-172.16.0.31
+      destination ip: 172.16.0.16-172.16.0.20,172.16.0.22-172.16.0.31
 
 vmss (subnet3/inbound):
   flow:
@@ -237,7 +237,7 @@ vm-002 (vm3/inbound):
 
     source ip: 172.16.0.5
     destination ip: 172.16.0.20
-    destination port: http, 3389
+    destination port: 3389,http
     protocol: TCP
 
     source ip: 172.16.0.5
@@ -252,7 +252,7 @@ vm-002 (vm3/inbound):
     vm-lb-01 => vm-lb-016 => x-example-vnet => another => vm-002237 => vm-002
       source ip: 172.16.0.5
       destination ip: 172.16.0.20
-      destination port: http, 3389
+      destination port: 3389,http
       protocol: TCP
 
       source ip: 172.16.0.5
@@ -286,7 +286,7 @@ x-example-vnet (vnet1/inbound):
     protocol: TCP
 
     source ip: 172.16.0.5
-    destination ip: 172.16.0.0-172.16.0.20, 172.16.0.22-172.16.0.255
+    destination ip: 172.16.0.0-172.16.0.20,172.16.0.22-172.16.0.255
 
   paths:
     vm-lb-01 => vm-lb-016 => x-example-vnet => ilb => x-example-vnet
@@ -296,7 +296,7 @@ x-example-vnet (vnet1/inbound):
       protocol: TCP
     vm-lb-01 => vm-lb-016 => x-example-vnet
       source ip: 172.16.0.5
-      destination ip: 172.16.0.0-172.16.0.20, 172.16.0.22-172.16.0.255
+      destination ip: 172.16.0.0-172.16.0.20,172.16.0.22-172.16.0.255
 
 x-example-vnet (vnet1/outbound):
   flow:

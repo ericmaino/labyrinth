@@ -13,6 +13,11 @@ export interface GraphServicesOptions {
   symbols?: SymbolTable;
 }
 
+export interface UniverseDefinition {
+  internet: string[];
+  symbols: Map<string, string[]>;
+}
+
 export class GraphServices {
   readonly index: AzureObjectIndex;
   readonly convert: IConverters;

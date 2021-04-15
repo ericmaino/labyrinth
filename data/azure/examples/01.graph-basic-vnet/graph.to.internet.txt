@@ -59,13 +59,13 @@ vm-001 (vm1/outbound):
 
 x-example-vnet (vnet1/outbound):
   flow:
-    destination ip: Internet
+    destination ip: except vnet1
 
   paths:
     x-example-vnet => vm-001-ip => AzureBackbone => Internet
       source ip: 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet1
     x-example-vnet => AzureBackbone => Internet
       source ip: except 172.16.0.4
-      destination ip: Internet
+      destination ip: except vnet1
 
