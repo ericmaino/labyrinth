@@ -1,3 +1,4 @@
+import DRange from 'drange';
 import {SymbolDefinitionSpec} from '.';
 
 export class SymbolStore {
@@ -25,5 +26,22 @@ export class SymbolStore {
 
   public getSymbolsSpec(): SymbolDefinitionSpec[] {
     return this.symbols;
+  }
+}
+
+export interface SymbolRange {
+  name: string;
+  range: DRange;
+}
+
+export class SymbolTable {
+  private readonly map: Map<string, DRange>;
+
+  constructor(map: Map<string, DRange>) {
+    this.map = map;
+  }
+
+  getInternet(): SymbolRange {
+    return {name: 'Internet', range: this.map.get('Internet') ?? new DRange()};
   }
 }

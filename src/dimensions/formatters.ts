@@ -1,5 +1,6 @@
 import DRange from 'drange';
 import * as ip from 'ip';
+import {SymbolTable} from '../graph/symbol_store';
 
 // DRange field formatting function. Has two use cases:
 //
@@ -21,6 +22,15 @@ export function createFormatter(formatter: Formatter) {
   return (r: DRange) => formatDRange(formatter, r);
 }
 
+export function createSymbolSetFormatter(
+  formatter: Formatter,
+  symbolTable: SymbolTable
+) {
+  return (r: DRange) => {
+    return formatDRangeWithSymbols(formatter, r, symbolTable);
+  };
+}
+
 //
 // Uncurried DRange formatter used by CreateFormatter.
 //
@@ -37,6 +47,36 @@ export function formatDRange(formatter: Formatter, r: DRange): string {
 
   // CASE II: run the formatter on each sub-range.
   return text.replace(/(\d+)(?:-(\d+))?/g, formatter);
+}
+
+//
+// Uncurried DRange formatter used by CreateFormatter.
+//
+export function formatDRangeWithSymbols(
+  formatter: Formatter,
+  r: DRange,
+  symbolTable: SymbolTable
+): string {
+  const includedSymbols: string[] = [];
+  const remainingRange = r.clone();
+
+  // First experiment, only reduce using the internet symbol
+  const symbolRange = symbolTable.getInternet();
+  if (rangeIncludes(remainingRange, symbolRange.range)) {
+    includedSymbols.push(symbolRange.name);
+    remainingRange.subtract(symbolRange.range);
+  }
+
+  if (remainingRange.length > 0) {
+    includedSymbols.push(formatDRange(formatter, remainingRange));
+  }
+
+  return includedSymbols.join(',');
+}
+
+function rangeIncludes(superset: DRange, subset: DRange): boolean {
+  const intersected = superset.clone().intersect(subset);
+  return intersected.toString() === subset.toString();
 }
 
 //
@@ -112,6 +152,59 @@ export function createNumberSymbolFormatter(
 // `start-end` range.
 //
 export function createIpFormatter(
+  rangeToSymbol: Map<string, string>
+): Formatter {
+  return (text: string, start?: string, end?: string) => {
+    const symbol = rangeToSymbol.get(text);
+    if (start === undefined) {
+      // CASE I: function is invoked directly by formatDRange(),
+      // instead of indirectly by String.replace(). In this case we
+      // are checking whether the entire string is in rangeToSymbol.
+      // Since the String.replace() API takes a function that returns
+      // string, as opposed to string | undefined, we return `text`
+      // if there is no match. The caller must check whether the return
+      // value is different than the input `text`.
+      return symbol || text;
+    } else if (symbol) {
+      // CASE II: function is invoked by String.replace() and the entire
+      // matched field is in rangeToSymbol. This could happen for a
+      // single numeric match or a match to a `start-end` range.
+      return symbol;
+    }
+
+    // If we got this far, we have failed to match a complete field.
+    // Look for matches to portions of the field.
+    if (end !== undefined) {
+      // CASE III: function is invoked by String.replace() and we've
+      // matched a `start-end` range. Attempt to format `start` and
+      // `end` individually.
+
+      // First, see if the range can be represented as a CIDR block.
+      const cidr = tryGetCIDR(Number(start), Number(end));
+      if (cidr !== undefined) {
+        return cidr;
+      }
+
+      // Otherwise, format the `start` and `end` components of the range.
+      const startIp = ip.fromLong(Number(start));
+      const endIp = ip.fromLong(Number(end));
+
+      const startText = rangeToSymbol.get(start) || startIp;
+      const endText = rangeToSymbol.get(end) || endIp;
+
+      return startText + '-' + endText;
+    } else {
+      // CASE IV: function is invoked by String.replace() and we've
+      // matched a single `start` value. No formatting required as
+      // `start` is already numeric.
+      // NOTE: don't have to consider rangeToSymbol.get(start) here
+      // because CASE II would have applied.
+      return ip.fromLong(Number(start));
+    }
+  };
+}
+
+export function createNewIpFormatter(
   rangeToSymbol: Map<string, string>
 ): Formatter {
   return (text: string, start?: string, end?: string) => {

@@ -1,5 +1,6 @@
 import DRange from 'drange';
 import * as t from 'io-ts';
+import {SymbolTable} from '../graph/symbol_store';
 
 import {isValidIdentifier} from '../utilities';
 
@@ -9,6 +10,7 @@ import {
   createFormatter,
   createIpFormatter,
   createNumberSymbolFormatter,
+  createSymbolSetFormatter,
 } from './formatters';
 
 import {
@@ -72,7 +74,10 @@ export class DimensionType {
 
     // Initialize formatter.
     if (spec.formatter === 'ip') {
-      this.formatter = createFormatter(createIpFormatter(this.rangeToSymbol));
+      this.formatter = createSymbolSetFormatter(
+        createIpFormatter(this.rangeToSymbol),
+        new SymbolTable(this.symbolToRange)
+      );
     } else if (spec.formatter === 'default') {
       this.formatter = createFormatter(
         createNumberSymbolFormatter(this.rangeToSymbol)
